@@ -28,6 +28,14 @@ MOKI Notes is a local Markdown notes app with desktop sticky cards, an explicit 
 
 Screenshots show the real Windows app with its editable built-in guide. The included reading-club project is fictional demo content. The Feishu screenshot shows the connection interface, not a completed sync.
 
+## Download and install (Windows x64)
+
+**[Download MOKI Notes 0.1.0 installer](https://github.com/JKZeng-cell/moki-notes/releases/download/v0.1.0/MOKI-Notes-Setup-0.1.0-x64.exe)** · [All releases and checksums](https://github.com/JKZeng-cell/moki-notes/releases/latest)
+
+Download the `.exe`, run the setup wizard, choose an install location, and launch the app. The installer includes the application runtime and Feishu/Lark CLI; regular installation does not require Node.js or npm. Feishu sync still requires your own authorization and configuration in the app.
+
+The current installer is unsigned, so Windows may show an unknown-publisher prompt. Each release includes `SHA256SUMS.txt` to verify the download. Only a Windows x64 installer is currently provided; macOS/Linux desktop behavior and installers have not been verified or released.
+
 ## Get the source and run
 
 Requires **Node.js 24 or later** and npm.
@@ -39,7 +47,7 @@ npm ci
 npm run desktop
 ```
 
-The desktop command builds the app and launches Electron. The initial public release provides source code; no signed installer is promised. Windows desktop behavior is locally tested. macOS and Linux paths exist, but desktop builds and behavior on those systems are not verified.
+The desktop command builds the app and launches Electron. Windows users can also install the downloadable setup package without a source-development environment. Windows desktop behavior is locally tested. macOS and Linux paths exist, but desktop builds and behavior on those systems are not verified.
 
 For a browser UI:
 

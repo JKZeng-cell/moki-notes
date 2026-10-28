@@ -28,6 +28,14 @@ MOKI便签是一款本地 Markdown 便签应用，支持桌面卡片、知识关
 
 以上截图来自真实 Windows 应用与内置使用指南。读书会项目属于虚构演示；飞书截图展示连接入口，不代表已完成同步。
 
+## 下载安装（Windows x64）
+
+**[下载 MOKI便签 0.1.0 安装包](https://github.com/JKZeng-cell/moki-notes/releases/download/v0.1.0/MOKI-Notes-Setup-0.1.0-x64.exe)** · [所有发布与校验文件](https://github.com/JKZeng-cell/moki-notes/releases/latest)
+
+下载 `.exe`，运行安装向导，选择安装目录后即可启动。安装包包含应用运行环境和飞书 CLI，普通安装使用不需要另装 Node.js 或 npm。飞书同步仍需在应用内完成自己的授权与配置。
+
+安装包当前未签名，Windows 可能显示未知发布者提示。发布页附 `SHA256SUMS.txt`，可核对下载文件。当前仅提供 Windows x64 安装包；macOS / Linux 尚未实机验证与发布安装包。
+
 ## 获取源码与启动
 
 需要 **Node.js 24+** 和 npm。
@@ -39,7 +47,7 @@ npm ci
 npm run desktop
 ```
 
-`desktop` 会先构建，再启动 Electron 桌面应用。本次公开发布提供源码，不承诺已签名安装包。Windows 桌面行为已有本地验证；macOS / Linux 的路径已实现，但对应系统上的桌面构建与行为尚未验证。
+`desktop` 会先构建，再启动 Electron 桌面应用。Windows 用户也可直接下载安装包，无需配置源码环境。Windows 桌面行为已有本地验证；macOS / Linux 的路径已实现，但对应系统上的桌面构建与行为尚未验证。
 
 浏览器运行：
 

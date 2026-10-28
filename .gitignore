@@ -4,7 +4,7 @@ data/
 release*/
 .smoke/
 *.log
-vendor/feishu-cli/
+vendor/
 *.db
 *.db-*
 *.sqlite*

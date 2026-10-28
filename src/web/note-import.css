@@ -1,0 +1,14 @@
+.note-import-dialog{width:460px;max-width:calc(100vw - 32px)}
+.note-import-dialog h2{display:flex;align-items:center;gap:8px;font-size:17px}
+.note-import-dialog>header>button{width:32px;height:32px;padding:0;flex:none}
+.note-import-body{padding:20px 22px;overflow:auto;min-height:0;font-size:13px}
+.note-import-body>p[role=status]{display:flex;align-items:center;gap:8px;line-height:1.7;color:var(--text)}
+.note-import-body>p[role=status] svg{flex:none;color:var(--accent)}
+.note-import-body>small{display:block;color:var(--muted);font-size:12px;line-height:1.7;margin-top:10px}
+.note-import-body progress{display:block;width:100%;height:7px;margin-top:14px;accent-color:var(--accent)}
+.note-import-current{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-import-warning{margin-top:14px;color:var(--muted);font-size:12px}
+.note-import-failures{list-style:none;padding:0;margin:10px 0 0;max-height:260px;overflow:auto;overscroll-behavior:contain;border:1px solid var(--border);border-radius:8px}
+.note-import-failures li{padding:10px 12px;display:flex;flex-direction:column;gap:5px;overflow-wrap:anywhere}
+.note-import-failures li+li{border-top:1px solid var(--border)}
+.note-import-failures strong{font-size:12px;font-weight:550}.note-import-failures span{font-size:11px;color:var(--danger);line-height:1.6}

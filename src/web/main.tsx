@@ -17,6 +17,7 @@ import './panel-resize.css';
 import './appearance.css';
 import './ui-polish.css';
 import './list-groups.css';
+import './note-import.css';
 const stickyId = new URLSearchParams(location.search).get('sticky');
 createRoot(document.getElementById('root')!).render(<React.StrictMode><AppearanceProvider />{stickyId ? <StickyCard id={stickyId} /> : <App />}</React.StrictMode>);
 
