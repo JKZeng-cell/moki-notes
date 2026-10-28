@@ -1,0 +1,91 @@
+.document-body.unified-body{display:flex;min-height:0;padding:0;overflow:hidden}.unified-body>.rich-editor{width:100%}
+.rich-editor{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;position:relative;color:var(--text)}
+.rich-toolbar{display:flex;align-items:center;gap:5px;padding:8px 22px;border-block:1px solid var(--border);flex:none;flex-wrap:wrap}
+.rich-toolbar select{font-size:12px;border:0;background:var(--subtle);padding:6px;width:88px}.rich-toolbar button{font-size:12px;padding:5px;min-width:28px}.rich-formats{display:flex;align-items:center;gap:2px}.rich-hint{color:var(--muted);font-size:11px;margin-left:auto}
+.rich-toolbar button[aria-pressed=true],.selection-tools button[aria-pressed=true]{background:var(--accent-soft);color:var(--accent)}
+.rich-scroll{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.rich-scroll>.tiptap{height:100%}
+.rich-document{min-height:250px;padding:24px 38px 100px;outline:0;caret-color:var(--accent);white-space:pre-wrap;line-height:1.85}
+.rich-document:focus-visible{outline:0;box-shadow:none}.rich-document p.is-editor-empty:first-child:before{content:attr(data-placeholder);float:left;color:var(--muted);pointer-events:none;height:0;font-weight:400;font-size:13px}
+/* Block boundaries use the same upright caret as text, while ProseMirror
+   keeps its gap selection and creates a normal paragraph when typing starts. */
+.rich-document .ProseMirror-gapcursor:after{top:0;left:0;width:0;height:1.2em;border-top:0;border-left:1px solid var(--accent)}
+.rich-document ul[data-type=taskList]{list-style:none;padding:0}.rich-document ul[data-type=taskList] li{display:flex;align-items:flex-start;gap:9px}.rich-document ul[data-type=taskList] li>label{flex:none;margin-top:3px;user-select:none}.rich-document ul[data-type=taskList] li>label input{margin:0}.rich-document ul[data-type=taskList] li>div{flex:1;min-width:0}.rich-document li p{margin:0}.rich-document li[data-checked=true]>div>p{color:var(--muted);text-decoration:line-through}
+.rich-document table{display:table;table-layout:fixed;margin:12px 0}.rich-document th,.rich-document td{position:relative;vertical-align:top;min-width:50px}.rich-document .selectedCell:after{position:absolute;inset:0;background:color-mix(in srgb,var(--accent) 12%,transparent);content:'';pointer-events:none}
+.rich-document .tableWrapper{overflow-x:auto}.rich-document .ProseMirror-selectednode{outline:2px solid var(--accent);outline-offset:2px}.rich-document .tiptap-mathematics-render{cursor:pointer;border-radius:5px;padding:2px 4px}.rich-document .block-math{padding:16px;text-align:center;overflow-x:auto}
+.rich-document .footnote-definition{font-size:12px;color:var(--muted);display:flex;gap:10px;border-top:1px solid var(--border);padding-top:8px}.rich-document .raw-html{white-space:pre-wrap;font-size:12px}
+.editor-popup{position:fixed;z-index:90;background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:0 10px 32px #242a4026;border-radius:11px;padding:5px}
+.selection-tools{display:flex;align-items:center;width:max-content;max-width:calc(100vw - 16px)}.selection-tools button{min-width:32px;padding:5px;font-size:11px}.slash-menu{width:280px;max-height:min(300px,calc(100vh - 40px));overflow:auto;scrollbar-width:thin}.slash-caption{font-size:11px;padding:8px;color:var(--muted);display:flex;justify-content:space-between}.slash-caption span{font-size:10px}.slash-menu>button{display:flex;justify-content:space-between;width:100%;padding:9px 10px;text-align:left}.slash-menu>button[aria-selected=true]{background:var(--accent-soft);color:var(--accent)}.slash-menu strong{font-size:12px;font-weight:550}.slash-menu small{font-size:10px;color:var(--muted)}.slash-menu p{padding:10px;color:var(--muted);font-size:12px}
+.rich-insert-dialog input{width:100%}.rich-insert-dialog{width:420px}.rich-insert-dialog p{color:var(--danger)}
+.rich-document .tiptap-mathematics-render[data-type=inline-math]{display:inline-block;vertical-align:baseline}
+.document-heading>input{border:1px solid transparent;border-radius:10px;padding:6px 10px;margin-left:-10px;transition:background .15s,border-color .15s,box-shadow .15s}.document-heading>input:hover{background:var(--subtle)}.document-heading>input:focus{outline:0;border-color:color-mix(in srgb,var(--accent) 35%,var(--border));background:var(--surface);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 8%,transparent)}
+.desktop-card-edit{padding:8px 12px 10px;gap:8px}.desktop-card-edit input.note-title-input{font-size:18px;line-height:1.5;font-weight:650;border:1px solid transparent;border-radius:9px;padding:8px 10px;background:color-mix(in srgb,var(--paper) 60%,white);color:var(--paper-ink);width:100%;outline:0}.desktop-card-edit input.note-title-input:focus{border-color:color-mix(in srgb,var(--accent) 35%,var(--paper));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 8%,transparent)}
+.desktop-card-edit>.rich-editor{border-top:1px solid var(--paper-line)}.desktop-card .rich-document{padding:10px 8px 40px;min-height:160px;font-size:14px}.desktop-card .rich-document h1{font-size:21px}.desktop-card .rich-document h2{font-size:18px}.desktop-card .rich-document h3{font-size:16px}.desktop-card-edit>footer{flex:none;border-top:1px solid var(--paper-line);padding-top:8px}.desktop-card .rich-document table{font-size:12px}.desktop-card .rich-document th,.desktop-card .rich-document td{padding:5px}
+@media(max-width:1000px){.rich-toolbar{padding:7px 14px;gap:3px}.rich-hint{display:none}.rich-document{padding:20px 24px 80px}}
+
+/* Keep the manager's document header compact, with room for editable titles. */
+.editor:not(.sticky-editor) .editor-topbar {
+  min-height: 40px;
+  padding: 5px 28px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.editor:not(.sticky-editor) .breadcrumb { gap: 8px; }
+.editor:not(.sticky-editor) .document-heading {
+  padding: 4px 38px 12px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+.editor:not(.sticky-editor) .document-heading > input {
+  font-size: 24px;
+  line-height: 1.4;
+  letter-spacing: -.4px;
+  padding: 4px 8px;
+  margin-left: -8px;
+  border-radius: 8px;
+}
+.editor-footer { flex-shrink: 0; }
+.editor-footer-summary { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.editor-footer-summary .save-state { flex: 0 1 auto; max-width: 28%; min-width: 0; }
+.editor-footer-summary .save-state > svg { flex-shrink: 0; }
+.editor-footer-summary .save-state > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editor-footer .document-info { margin: 0; flex: 1; min-width: 0; min-height: 22px; gap: 8px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; font-size: 11px; }
+.editor-footer .document-info > span { flex-shrink: 0; }
+.editor-footer > .actions { flex-shrink: 0; }
+.editor:not(.sticky-editor) > .notice {
+  flex-shrink: 0;
+  padding: 6px 20px;
+  gap: 4px 8px;
+  line-height: 1.5;
+}
+.editor:not(.sticky-editor) > .notice button { min-height: 26px; padding: 4px 8px; }
+@media(max-width:1150px) {
+  .editor:not(.sticky-editor) .editor-topbar { padding-inline: 16px; }
+  .editor:not(.sticky-editor) .document-heading { padding-inline: 24px; }
+}
+@media(max-width:860px) {
+  .editor:not(.sticky-editor) .editor-topbar { padding-inline: 12px; }
+  .editor:not(.sticky-editor) .document-heading > input { font-size: 22px; }
+  .editor:not(.sticky-editor) > .notice { padding-inline: 16px; }
+}
+
+.editor-tool-groups{display:flex;align-items:center;flex-wrap:wrap;gap:2px;max-width:100%}
+.editor-tool-groups>button{display:inline-flex;align-items:center;justify-content:center;gap:3px;min-width:30px;min-height:30px;padding:6px;border-radius:7px}
+.editor-tool-groups>button[aria-expanded=true]{background:var(--accent-soft);color:var(--accent)}
+.editor-tool-separator{width:1px;height:18px;background:var(--border);margin:0 3px}
+.editor-tool-menu{z-index:95;width:176px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;padding:5px}
+.editor-tool-menu>button{display:flex;align-items:center;gap:10px;width:100%;padding:7px 9px;min-height:33px;text-align:left;font-size:12px}
+.editor-tool-menu>button>span:not(.editor-color-dot){flex:1}
+.editor-tool-menu>button[aria-checked=true]{color:var(--accent);background:var(--accent-soft)}
+.editor-tool-menu button:focus-visible,.editor-tool-groups button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.editor-color-dot{width:14px;height:14px;border-radius:50%;flex:none;border:1px solid #ffffff50}
+.editor-custom-color{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:6px 9px;border-top:1px solid var(--border);margin-top:4px}.editor-custom-color input{width:30px;height:26px;padding:2px;border:1px solid var(--border);border-radius:5px;background:var(--surface);cursor:pointer}
+.markdown mark{background:#ffe58a;color:#342b16;border-radius:3px;padding:0 2px}
+.markdown u{text-underline-offset:3px;text-decoration-thickness:1px}
+.slash-menu{max-width:calc(100vw - 16px)}
+.slash-menu>button{align-items:center;justify-content:flex-start;gap:10px;height:44px;padding:7px 9px}
+.slash-icon{display:flex;align-items:center;justify-content:center;flex:0 0 28px;width:28px;height:28px;border-radius:7px;background:var(--subtle);color:var(--muted)}
+.slash-icon svg{flex:none}
+.slash-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+.slash-copy strong,.slash-copy small{display:block;line-height:14px;white-space:nowrap}
+.slash-copy small{overflow:hidden;text-overflow:ellipsis}
+.slash-menu>button[aria-selected=true] .slash-icon{background:var(--surface);color:var(--accent)}

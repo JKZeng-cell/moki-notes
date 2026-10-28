@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="460" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+<title id="title">MOKI便签 · 从想法到知识</title><desc id="desc">一张便签连接写作、桌面提醒、知识树和 Agent，形成记录、整理、连接、使用的循环。</desc>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#eeeaff"/><stop offset="1" stop-color="#f0f9f6"/></linearGradient><linearGradient id="tile" x2="1" y2="1"><stop stop-color="#9484f1"/><stop offset="1" stop-color="#6253ba"/></linearGradient></defs>
+<rect width="1200" height="460" rx="28" fill="url(#bg)"/>
+<g font-family="Microsoft YaHei, sans-serif"><text x="50" y="62" fill="#7165ae" font-size="18" letter-spacing="5">MOKI NOTES / FIELD GUIDE</text><text x="50" y="124" fill="#29263f" font-size="42" font-weight="700">一条便签，连接更多想法。</text><text x="50" y="165" fill="#6c6881" font-size="21">记录灵感 · 整理资料 · 连接知识 · 与 Agent 协作</text>
+<g fill="none" stroke="#b8ace5" stroke-width="3"><path d="M600 273H270V244M600 273H930V244M600 273V365H270M600 365H930"/><path d="M270 244V365M930 244V365" stroke-dasharray="8 9"/></g>
+<g fill="#fff" stroke="#ddd7ed"><rect x="50" y="212" width="285" height="96" rx="18"/><rect x="865" y="212" width="285" height="96" rx="18"/><rect x="50" y="334" width="285" height="96" rx="18"/><rect x="865" y="334" width="285" height="96" rx="18"/></g>
+<g fill="#36304f" font-size="24" font-weight="600"><text x="78" y="250">01  随时记录</text><text x="893" y="250">02  桌面提醒</text><text x="78" y="372">03  知识关联</text><text x="893" y="372">04  Agent 记忆</text></g>
+<g fill="#79738e" font-size="18"><text x="78" y="281">Markdown 实时排版</text><text x="893" y="281">把重要的事固定在身边</text><text x="78" y="403">层级与跨主题连接</text><text x="893" y="403">MCP 读写与本地检索</text></g>
+<rect x="522" y="219" width="156" height="156" rx="36" fill="url(#tile)"/><rect x="554" y="244" width="90" height="105" rx="8" fill="#fdfcff" transform="rotate(-5 599 296)"/><path d="M571 308c3-27 9-30 13-4 4-23 13-29 17-3 6-27 15-24 19 1" fill="none" stroke="#7661cf" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><text x="600" y="414" text-anchor="middle" fill="#6253a5" font-size="22">让每个想法，都有归处</text></g>
+</svg>

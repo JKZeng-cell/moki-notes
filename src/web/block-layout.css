@@ -1,0 +1,11 @@
+.moki-columns{display:grid;grid-template-columns:repeat(var(--moki-column-count,2),minmax(140px,1fr));overflow-x:auto;gap:20px;margin:16px 0;align-items:start;min-width:0}
+.moki-column{min-width:0;overflow-wrap:anywhere}.moki-column>:first-child{margin-top:0}.moki-column>:last-child{margin-bottom:0}.moki-column img,.moki-column video{max-width:100%}.moki-column pre{max-width:100%;overflow:auto}
+.moki-column .resource-bar{position:relative}.moki-column .resource-controls{position:absolute;right:4px;top:4px;background:var(--surface);border:1px solid var(--border);border-radius:6px;box-shadow:0 2px 8px #242a4014}.moki-column .resource-main{width:100%}
+.rich-document .moki-columns{gap:28px;padding:12px;border:1px dashed var(--border);border-radius:9px}
+.rich-document .moki-column{min-height:44px;position:relative}.rich-document .moki-column:empty:before{content:'输入内容';color:var(--muted)}
+.rich-document .moki-column>p:only-child:empty:before{content:'输入内容，或拖入模块';color:var(--muted);font-size:12px;pointer-events:none;float:left;height:0}
+.block-control{position:fixed;z-index:85;user-select:none}.block-grip{width:22px;height:26px;min-height:26px;padding:2px;cursor:grab;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:5px;touch-action:none}.block-grip:active{cursor:grabbing}.block-grip:hover{color:var(--accent);background:var(--accent-soft)}
+.block-menu{width:182px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto}.block-menu button{width:100%;display:flex;justify-content:flex-start;gap:8px;font-size:12px;padding:8px 7px}
+.block-drop-indicator{position:fixed;z-index:140;background:var(--accent);border-radius:4px;pointer-events:none;box-shadow:0 0 0 2px var(--accent-soft)}
+.block-drag-message{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);z-index:140;max-width:calc(100vw - 24px);border-radius:8px;padding:8px 12px;background:var(--surface);color:var(--accent);border:1px solid var(--border);box-shadow:0 4px 18px #242a4020;font-size:12px;pointer-events:none}
+.desktop-card .rich-document{padding-left:24px}.desktop-card .moki-columns{gap:12px}.desktop-card .rich-document .moki-columns{padding:8px;gap:24px}

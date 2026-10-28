@@ -1,0 +1,18 @@
+:root{--note-font-size:14px}
+.markdown,.rich-document,.desktop-card .rich-document,.desktop-card-content .markdown{font-size:var(--note-font-size)}
+.markdown h1,.rich-document h1,.desktop-card .rich-document h1{font-size:2em}
+.markdown h2,.rich-document h2,.desktop-card .rich-document h2{font-size:1.6em}
+.markdown h3,.rich-document h3,.desktop-card .rich-document h3{font-size:1.3em}
+.markdown h4,.rich-document h4{font-size:1.15em}
+.markdown h5,.rich-document h5,.markdown h6,.rich-document h6{font-size:1em}
+.markdown table,.rich-document table,.desktop-card .rich-document table{font-size:inherit}
+.markdown pre,.rich-document pre,.markdown code,.rich-document code{font-size:.92em}
+.desktop-card .rich-document h1,.desktop-card-content .markdown h1{font-size:1.5em}
+.desktop-card .rich-document h2,.desktop-card-content .markdown h2{font-size:1.2857em}
+.desktop-card .rich-document h3,.desktop-card-content .markdown h3{font-size:1.1429em}
+.settings-font-preview{font-size:var(--preview-font-size,14px);line-height:1.8;padding:12px;border-radius:8px;background:var(--page);margin-top:10px}
+.settings-tabs{display:flex;gap:4px;padding:0 20px 12px;flex:none;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.settings-tabs button{font-size:12px;padding:6px 12px}
+.settings-tabs button[aria-selected=true]{color:var(--accent);background:var(--accent-soft);font-weight:600}
+.settings-transfer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.settings-transfer-actions button{border:1px solid var(--border);font-size:12px}
+.settings-sync-report{font-size:12px;line-height:1.8;margin-top:12px;max-height:180px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}

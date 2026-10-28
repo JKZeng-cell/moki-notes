@@ -1,0 +1,35 @@
+.note-group{margin-bottom:10px}
+.note-group-heading{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:4px 8px;min-height:36px;color:var(--muted);border-radius:7px;font-size:12px}
+.note-group-heading .group-name{display:flex;gap:7px;align-items:center;min-width:0}
+.note-group-heading small{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+.note-group-heading button{min-height:28px;padding:4px;flex-shrink:0}
+.note-group-heading .group-toggle{flex:1;min-width:0;justify-content:flex-start;gap:7px;font-size:12px;text-align:left}
+.group-toggle span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.group-toggle[aria-expanded=true]{color:var(--text)}
+.group-actions{display:flex;opacity:0;gap:2px}
+.note-group-heading:hover .group-actions,.note-group-heading:focus-within .group-actions{opacity:1}
+.note-group-empty{margin:4px 8px 10px;padding:12px 6px;border:1px dashed var(--border);border-radius:8px;text-align:center;font-size:11px;color:var(--muted)}
+.list-note-row{position:relative}
+.list-note-row.list-drop-before:before,.list-note-row.list-drop-after:after{content:'';position:absolute;z-index:3;left:4px;right:4px;height:3px;border-radius:2px;background:var(--accent);pointer-events:none}
+.list-note-row.list-drop-before:before{top:-2px}.list-note-row.list-drop-after:after{bottom:1px}
+.list-drop-group{background:var(--accent-soft);outline:2px solid var(--accent);outline-offset:-2px}
+.group-bulk-move{display:flex;gap:6px;padding:4px 8px 10px}
+.group-bulk-move select{min-width:0;flex:1;font-size:12px;padding:6px}.group-bulk-move button{font-size:12px;white-space:nowrap}
+.list-group-dialog{width:420px;max-width:calc(100vw - 32px)}
+.list-group-dialog form{padding:18px 20px;overflow:auto}
+.list-group-dialog label{display:block;font-size:12px;color:var(--muted)}
+.list-group-dialog input{display:block;width:100%;margin-top:8px}
+.list-group-dialog p{font-size:13px;line-height:1.8;overflow-wrap:anywhere}
+.list-group-dialog footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+@media(hover:none){.group-actions{opacity:1}}
+
+.note-group-heading>.group-name+button{font-size:11px;gap:4px;color:var(--muted)}
+
+.note-group-placeholder{min-height:36px;padding:10px 12px;color:var(--muted);font-size:11px;line-height:16px}
+.note-group{position:relative}
+.note-group-heading[draggable=true]{cursor:grab}
+.note-group-heading .group-drag-handle{width:18px;padding:0;cursor:grab;opacity:.45}
+.note-group-heading:hover .group-drag-handle,.group-drag-handle:focus-visible{opacity:1}
+.group-dragging>.note-group-heading{background:var(--accent-soft);cursor:grabbing}
+.group-drop-before:before,.group-drop-after:after{content:'';position:absolute;z-index:4;left:8px;right:8px;height:3px;border-radius:2px;background:var(--accent);pointer-events:none}
+.group-drop-before:before{top:-3px}.group-drop-after:after{bottom:-5px}

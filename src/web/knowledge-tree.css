@@ -1,0 +1,45 @@
+.app.knowledge-mode:not(.sticky-app){grid-template-columns:224px minmax(0,1fr)}.knowledge-workspace{height:100%;display:flex;flex-direction:column;background:var(--surface);min-width:0}.knowledge-filters{display:flex;align-items:center;padding:12px 24px;gap:20px;font-size:11px;border-bottom:1px solid var(--border)}.knowledge-filters .search{margin:0;flex:1;max-width:360px}.knowledge-filters>span{margin-left:auto;color:var(--muted)}.check-label{display:flex;align-items:center;gap:6px}.knowledge-body{display:flex;flex:1;min-height:0}.neural-stage{flex:1;min-width:0;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 45%,var(--accent-soft),transparent 70%),radial-gradient(var(--border) 1px,transparent 1px);background-size:auto,20px 20px}.neural-graph{width:100%;height:100%;touch-action:none;cursor:grab}.neural-graph:active{cursor:grabbing}.neural-edge{fill:none;stroke:var(--muted);color:var(--muted);stroke-width:1.2;opacity:.3}.neural-edge.link{stroke-dasharray:5 5}.neural-edge.connected{stroke:var(--accent);color:var(--accent);opacity:.75;stroke-width:2}.neural-node{cursor:pointer;outline:none}.node-halo{fill:var(--accent);opacity:.05}.node-core{fill:var(--surface);stroke:var(--accent);stroke-width:1.5}.node-light{fill:var(--accent);opacity:.55}.neural-node.selected .node-halo,.neural-node:hover .node-halo,.neural-node:focus-visible .node-halo{opacity:.18}.neural-node.selected .node-core{fill:var(--accent);stroke-width:3}.neural-node.selected .node-light{fill:white;opacity:1}.neural-node text{fill:var(--text);font-family:inherit;font-size:12px;font-weight:550;paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}.neural-node .node-private{font-size:9px;font-weight:400;fill:var(--muted)}.graph-legend{position:absolute;top:16px;left:20px;display:flex;gap:18px;font-size:10px;color:var(--muted);pointer-events:none}.graph-legend span{display:flex;align-items:center;gap:6px}.graph-legend i{width:20px;border-top:1px solid var(--accent)}.graph-legend i.dashed{border-top-style:dashed}.graph-bottom{position:absolute;bottom:14px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;color:var(--muted);pointer-events:none}.graph-bottom>div{display:flex;align-items:center;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:3px;pointer-events:auto}.graph-bottom>div>span{min-width:35px;text-align:center}.graph-empty{height:100%;font-size:13px;text-align:center;padding:30px}.knowledge-inspector{width:272px;flex:none;border-left:1px solid var(--border);padding:24px 20px;overflow:auto;font-size:12px}.knowledge-inspector h2{font-size:19px;line-height:1.6;overflow-wrap:anywhere;margin:10px 0}.knowledge-excerpt{color:var(--muted);font-size:12px;line-height:1.9;overflow-wrap:anywhere}.knowledge-inspector>.primary{width:100%;font-size:12px;margin:10px 0 22px}.knowledge-inspector>label{display:block;margin:16px 0 8px;font-size:11px;color:var(--muted)}.knowledge-inspector>label.check-label{display:flex}.knowledge-inspector select{display:block;width:100%;font-size:12px;margin-top:6px}.knowledge-inspector h3{font-size:12px;margin:26px 0 9px}.relation-row{display:flex;align-items:center;border-bottom:1px solid var(--border)}.relation-row>button:first-child{flex:1;min-width:0;justify-content:flex-start;padding:8px 0;font-size:12px}.relation-row small{font-size:9px;color:var(--accent);white-space:nowrap}.relation-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.knowledge-tags{margin-top:15px;display:flex;gap:4px;flex-wrap:wrap}.knowledge-inspector .muted{color:var(--muted);line-height:1.8}.knowledge-mode .workspace{min-width:0}
+@media(max-width:1150px){.app.knowledge-mode:not(.sticky-app){grid-template-columns:192px minmax(0,1fr)}.knowledge-inspector{width:235px;padding:18px 15px}.knowledge-filters{gap:10px;padding:12px 18px}.knowledge-filters>span{display:none}.graph-bottom>span{max-width:130px}}
+@media(max-width:860px){.app.knowledge-mode:not(.sticky-app){grid-template-columns:65px minmax(0,1fr)}.knowledge-inspector{width:210px}.knowledge-filters{flex-wrap:wrap}}
+@media(max-width:620px){.knowledge-body{flex-direction:column;overflow:auto}.neural-stage{min-height:350px;flex:none}.knowledge-inspector{width:100%;border-left:0;border-top:1px solid var(--border);overflow:visible}}
+
+.neural-node{cursor:grab;user-select:none}.neural-node.dragging{cursor:grabbing}.neural-node.dragging .node-halo{opacity:.28}.neural-graph{user-select:none}.knowledge-inspector>.reset-node-position{font-size:11px;color:var(--muted);margin-top:-12px;margin-bottom:8px}
+
+/* Canvas directory: a local, scrollable overlay, independent of graph gestures. */
+.graph-directory{position:absolute;z-index:5;top:14px;left:16px;max-width:calc(100% - 32px);max-height:calc(100% - 72px);display:flex;flex-direction:column;align-items:flex-start;pointer-events:none}
+.graph-directory-trigger{pointer-events:auto;min-height:34px;padding:7px 11px;background:var(--surface);border:1px solid var(--border);border-radius:9px;box-shadow:0 2px 8px #00000006;font-size:12px}
+.graph-directory-trigger[aria-expanded=true]{color:var(--accent);border-color:var(--accent)}
+.graph-directory-panel{pointer-events:auto;display:flex;flex-direction:column;min-height:0;width:340px;max-width:100%;margin-top:8px;border:1px solid var(--border);border-radius:12px;background:var(--surface);box-shadow:0 12px 36px #16142b20;overflow:hidden}
+.graph-directory-panel>header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;font-size:13px}
+.graph-directory-panel>header button{width:28px;min-height:28px;padding:4px}
+.graph-directory-panel>.search{margin:0 12px 8px;flex-shrink:0}
+.graph-directory-scroll{overflow:auto;min-height:0;overscroll-behavior:contain;padding:0 6px}
+.graph-directory-panel .hierarchy-help{display:none}
+.graph-directory-panel .hierarchy{padding:0}
+.graph-directory-panel .hierarchy-row{min-height:34px}
+.graph-directory-panel>footer{flex-shrink:0;border-top:1px solid var(--border);padding:9px 12px;font-size:10px;color:var(--muted)}
+.neural-stage .graph-legend{top:22px;left:auto;right:16px;gap:4px 12px;max-width:calc(100% - 150px);flex-wrap:wrap;justify-content:flex-end}
+.graph-legend span{white-space:nowrap}.graph-legend i{flex-shrink:0}
+.neural-graph.panning,.neural-graph.panning .neural-node{cursor:grabbing}
+.neural-edge,.node-core,.neural-node text{vector-effect:non-scaling-stroke}
+.graph-bottom>div>span{font-variant-numeric:tabular-nums;min-width:48px;max-width:92px;white-space:nowrap}
+
+.graph-bottom>span>button{pointer-events:auto;background:var(--surface);border:1px solid var(--border);font-size:11px;white-space:nowrap;padding:6px 9px}
+.node-kind-parent .node-core{stroke-width:2.2;fill:var(--accent)}
+.node-kind-parent .node-light{fill:var(--on-accent);opacity:1}
+.neural-node.selected:not(.node-kind-parent) .node-core{fill:var(--accent-soft);stroke-width:2}
+.neural-node.selected:not(.node-kind-parent) .node-light{fill:var(--accent);opacity:1}
+.node-selection{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:0;vector-effect:non-scaling-stroke;pointer-events:none}
+.neural-node.selected .node-selection{opacity:.85}
+.node-kind-standalone .node-core{stroke-dasharray:3 3}
+.neural-node.connection-target .node-halo{opacity:.35}
+.neural-node.connection-target .node-core{stroke-width:4}
+.node-connect{opacity:0;cursor:crosshair;pointer-events:none}
+.neural-node:hover .node-connect,.neural-node:focus-within .node-connect,.neural-node.selected .node-connect{opacity:1;pointer-events:auto}
+.node-connect-hit{fill:transparent}
+.node-connect-dot{fill:var(--surface);stroke:var(--accent);stroke-width:1.5}
+.node-connect path{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-linecap:round;pointer-events:none}
+.node-connect:hover .node-connect-dot{fill:var(--accent-soft)}
+.connection-preview{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4;vector-effect:non-scaling-stroke;pointer-events:none}
+.graph-legend i.parent-node-key{width:12px;height:12px;border:2px solid var(--accent);border-radius:50%;background:var(--accent)}
+.graph-legend i.child-node-key{width:12px;height:12px;border:1.5px solid var(--accent);border-radius:50%;background:var(--surface)}

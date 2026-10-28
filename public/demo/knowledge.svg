@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="460" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+<title id="title">有层级，也有跨主题连接</title><desc id="desc">MOKI便签作为根节点连接写作、桌面和知识分支；Agent 和项目记忆作为知识的子节点，并用虚线连接其他主题。</desc>
+<rect width="1200" height="460" rx="28" fill="#eaf5f0"/>
+<g font-family="Microsoft YaHei, sans-serif"><text x="44" y="55" font-size="18" fill="#678d7d" letter-spacing="4">A TREE OF CONNECTED IDEAS</text><text x="44" y="103" font-size="32" fill="#294c3c" font-weight="700">知识有归处，也有新的去处。</text>
+<g fill="none" stroke="#79aa96" stroke-width="3"><path d="M600 180 245 274M600 180 600 274M600 180 955 274M955 274 805 382M955 274 1065 382"/><path d="M245 274Q425 395 600 274M805 382Q495 455 245 274M600 274Q655 368 805 382" stroke="#a6b6ac" stroke-dasharray="9 9"/></g>
+<rect x="480" y="143" width="240" height="66" rx="33" fill="#4a8a70"/><text x="600" y="185" text-anchor="middle" font-size="24" font-weight="600" fill="#fff">MOKI便签</text>
+<g fill="#fff" stroke="#b7d7c9" stroke-width="2"><rect x="135" y="241" width="220" height="66" rx="18"/><rect x="490" y="241" width="220" height="66" rx="18"/><rect x="845" y="241" width="220" height="66" rx="18"/><rect x="710" y="351" width="190" height="62" rx="18"/><rect x="970" y="351" width="190" height="62" rx="18"/></g>
+<g fill="#3a6955" font-size="23" text-anchor="middle"><text x="245" y="283">写作与排版</text><text x="600" y="283">桌面便签</text><text x="955" y="283">知识关联</text><text x="805" y="390">Agent 协作</text><text x="1065" y="390">项目记忆</text></g>
+<path d="M50 380h45" stroke="#79aa96" stroke-width="3"/><text x="109" y="388" fill="#678d7d" font-size="18">父子关系</text><path d="M50 416h45" stroke="#a6b6ac" stroke-width="3" stroke-dasharray="7 6"/><text x="109" y="424" fill="#678d7d" font-size="18">跨节点关联</text></g></svg>

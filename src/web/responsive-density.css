@@ -1,0 +1,71 @@
+/* Adapt to the user's resizable panels, not just the overall window width. */
+.note-list { container: notes-list / inline-size; }
+.editor:not(.sticky-editor) { container: note-editor / inline-size; }
+.sidebar { container: notes-sidebar / inline-size; }
+.card-main { min-width: 0; }
+.card-title { min-width: 0; }
+.card-bottom { min-width: 0; min-height: 22px; flex-wrap: nowrap; gap: 8px; }
+.card-bottom > span:first-child { flex: none; white-space: nowrap; }
+.card-bottom > .tag { display: block; flex: 0 1 auto; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-bottom > .card-sync, .card-bottom > .color-dot { flex-shrink: 0; }
+.card-sync svg, .search > svg, .note-group-heading svg { flex-shrink: 0; }
+.list-header > div { min-width: 0; }
+.list-header h1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list-header > button { flex-shrink: 0; }
+.list-controls { gap: 8px; }
+.list-controls > label { flex-shrink: 0; white-space: nowrap; }
+.list-controls > select { min-width: 0; }
+.note-group-heading .group-name { white-space: nowrap; }
+.group-actions { flex-shrink: 0; }
+.sidebar .brand > div:last-child { min-width: 0; }
+.sidebar .brand strong, .sidebar .brand small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar .brand-mark { flex-shrink: 0; }
+.tag-cloud button { display: block; max-width: 100%; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.editor-footer .document-info, .editor-footer .version { white-space: nowrap; }
+.editor-footer .document-info > .tag { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+.editor-topbar .actions button, .editor-footer .actions button { flex-shrink: 0; }
+.editor:not(.sticky-editor) .rich-toolbar { min-width: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; }
+.editor:not(.sticky-editor) .rich-toolbar > button, .editor:not(.sticky-editor) .editor-tool-groups { flex-shrink: 0; }
+.editor:not(.sticky-editor) .editor-tool-groups { flex-wrap: nowrap; }
+.editor:not(.sticky-editor) .editor-tool-groups > button, .editor:not(.sticky-editor) .rich-toolbar svg { flex-shrink: 0; }
+
+@container notes-list (max-width: 280px) {
+  .card-bottom > .tag, .search kbd { display: none; }
+  .list-header { padding-inline: 16px; }
+  .search { margin-inline: 14px; }
+  .list-controls { margin-inline: 16px; }
+}
+@container notes-list (max-width: 260px) {
+  .card-sync-label, .note-group-heading > .group-name + button > span { display: none; }
+  .card-sync { min-width: 14px; justify-content: center; }
+  .card-main { padding-right: 12px; padding-left: 30px; }
+  .list-scroll { padding-inline: 10px; }
+  .card-bottom { gap: 7px; }
+}
+@container notes-sidebar (min-width: 100px) and (max-width: 180px) {
+  .brand small, .agent-entry small { display: none; }
+  .brand { gap: 8px; margin-inline: 0; }
+}
+@container note-editor (max-width: 760px) {
+  .editor-footer .document-info > .tag { display: none; }
+  .rich-hint { display: none; }
+}
+@container note-editor (max-width: 560px) {
+  .breadcrumb { display: none; }
+  .editor-topbar > .actions { margin-left: auto; }
+  .editor-footer .document-info > .info-date,
+  .editor-footer .document-info > .info-divider,
+  .editor-footer .version { display: none; }
+  .editor-footer-summary .save-state { max-width: 110px; }
+  .editor:not(.sticky-editor) .document-heading { padding-inline: 20px; }
+  .editor:not(.sticky-editor) .document-heading > input { font-size: 22px; }
+  .editor:not(.sticky-editor) .rich-toolbar { padding-inline: 12px; gap: 2px; }
+}
+@container note-editor (max-width: 420px) {
+  .editor-tool-groups > button > svg:last-child:not(:first-child), .editor-tool-separator { display: none; }
+  .editor-footer .document-info { display: none; }
+  .editor-footer-summary .save-state { max-width: 100%; }
+  .editor-footer { gap: 6px; padding-inline: 8px; }
+  .editor-footer > .actions { gap: 0; }
+  .editor:not(.sticky-editor) .rich-document { padding-inline: 20px; }
+}

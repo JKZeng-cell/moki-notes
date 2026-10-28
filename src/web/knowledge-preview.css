@@ -1,0 +1,21 @@
+/* Short notes use their natural height; long notes expand with the window and
+   scroll independently, leaving the inspector's actions reachable below. */
+.knowledge-preview{max-height:clamp(140px,calc(100dvh - 540px),60dvh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-gutter:stable;min-width:0;margin:12px 0 4px}
+.knowledge-preview:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.knowledge-preview .markdown{padding:0 6px 2px 0;font-size:var(--note-font-size,14px);line-height:1.8;color:var(--text);min-width:0}
+.knowledge-preview .markdown>:first-child{margin-top:0}
+.knowledge-preview .markdown>:last-child{margin-bottom:0}
+.knowledge-preview .markdown h1{font-size:1.65em;margin:16px 0 8px;line-height:1.45}
+.knowledge-preview .markdown h2{font-size:1.4em;margin:14px 0 7px;line-height:1.5}
+.knowledge-preview .markdown h3{font-size:1.2em;margin:12px 0 6px;line-height:1.5}
+.knowledge-preview .markdown h4,.knowledge-preview .markdown h5,.knowledge-preview .markdown h6{font-size:1em;margin:10px 0 5px}
+.knowledge-preview .markdown p{margin:8px 0}
+.knowledge-preview .markdown blockquote{margin:10px 0;padding:8px 12px}
+.knowledge-preview .markdown pre{max-width:100%;overflow:auto;margin:10px 0}
+.knowledge-preview .markdown .tableWrapper{max-width:100%;overflow:auto}
+.knowledge-preview .markdown table{margin:10px 0;font-size:.9em;min-width:100%}
+.knowledge-preview .markdown th,.knowledge-preview .markdown td{padding:7px 9px}
+.knowledge-preview .markdown .katex-display{max-width:100%;overflow:auto}
+.knowledge-preview-status{padding:6px 0;color:var(--muted);font-size:12px;line-height:1.8}
+.knowledge-preview-status button{font-size:12px;color:var(--accent);margin-top:4px}
+@media(max-width:620px){.knowledge-preview{max-height:clamp(140px,40dvh,400px)}}

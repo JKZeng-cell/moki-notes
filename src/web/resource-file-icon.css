@@ -1,0 +1,22 @@
+.resource-icon.file-format-icon{flex-direction:column;gap:2px;overflow:hidden;color:var(--file-fg);background:var(--file-bg)}
+.file-format-icon svg{flex:none}.file-format-icon>small{font:700 8px/1.1 system-ui,sans-serif;letter-spacing:.2px;white-space:nowrap;max-width:100%}
+.file-format-icon[data-file-tone=blue]{--file-fg:#3067b9;--file-bg:#eaf1fc}
+.file-format-icon[data-file-tone=green]{--file-fg:#258352;--file-bg:#e8f5ee}
+.file-format-icon[data-file-tone=orange]{--file-fg:#bf5a28;--file-bg:#fff0e6}
+.file-format-icon[data-file-tone=red]{--file-fg:#c84c53;--file-bg:#fdecee}
+.file-format-icon[data-file-tone=purple]{--file-fg:#7560bb;--file-bg:#f0ecfc}
+.file-format-icon[data-file-tone=teal]{--file-fg:#288688;--file-bg:#e6f5f3}
+.file-format-icon[data-file-tone=amber]{--file-fg:#9a7021;--file-bg:#fbf3df}
+.file-format-icon[data-file-tone=pink]{--file-fg:#ac5684;--file-bg:#f9ecf3}
+.file-format-icon[data-file-tone=slate]{--file-fg:#68738a;--file-bg:#eef0f5}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=blue]{--file-fg:#8fb8f5;--file-bg:#283b57}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=green]{--file-fg:#8ed5ab;--file-bg:#253f36}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=orange]{--file-fg:#f4b08a;--file-bg:#49362e}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=red]{--file-fg:#f1a0a6;--file-bg:#472f3b}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=purple]{--file-fg:#baacf2;--file-bg:#35314f}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=teal]{--file-fg:#8ed5d1;--file-bg:#263e42}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=amber]{--file-fg:#e7c37a;--file-bg:#413b2d}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=pink]{--file-fg:#e9a3ca;--file-bg:#453147}
+[data-color-scheme=dark] .file-format-icon[data-file-tone=slate]{--file-fg:#b0bcd2;--file-bg:#30394c}
+.resource-icon.file-format-icon[data-compact=true]{background:transparent}
+.desktop-card .resource-icon.file-format-icon:not([data-compact=true]){width:36px;height:36px;border-radius:7px}

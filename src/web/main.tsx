@@ -1,0 +1,24 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { AppearanceProvider } from './appearance.js';
+import { App } from './app.js';
+import { StickyCard } from './sticky-card.js';
+import './fonts.css';
+import './styles.css';
+import './sticky-card.css';
+import './rich-editor.css';
+import './resources.css';
+import './knowledge-tree.css';
+import './agent-connection.css';
+import './settings.css';
+import './hierarchy.css';
+import './table-edge-controls.css';
+import './panel-resize.css';
+import './appearance.css';
+import './ui-polish.css';
+import './list-groups.css';
+const stickyId = new URLSearchParams(location.search).get('sticky');
+createRoot(document.getElementById('root')!).render(<React.StrictMode><AppearanceProvider />{stickyId ? <StickyCard id={stickyId} /> : <App />}</React.StrictMode>);
+
+import './feishu-activity.css';
+import './responsive-density.css';

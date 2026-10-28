@@ -1,0 +1,31 @@
+.card-main .card-title{padding-right:25px}
+.card-pin{position:absolute;right:10px;top:11px;width:27px;min-height:27px;padding:5px;color:var(--muted);opacity:.65;border-radius:6px}
+.card-pin:hover,.card-pin:focus-visible{opacity:1;color:var(--accent);background:var(--accent-soft)}
+.card-pin.pinned{opacity:1;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.desktop-card{--paper:#f2f0ff;--paper-ink:#39334f;--paper-muted:#79718e;--paper-line:#dbd5ed;--accent:#625bc5;--accent-soft:#e9e4fc;--surface:var(--paper);--subtle:color-mix(in srgb,var(--paper-ink) 5%,var(--paper));--text:var(--paper-ink);--muted:var(--paper-muted);--border:var(--paper-line);height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);color-scheme:light}
+.desktop-card[data-color=amber]{--paper:#fff4df;--paper-ink:#624b2d;--paper-muted:#9b815d;--paper-line:#eddbb7;--accent:#9a6a2e;--accent-soft:#f5e7cb}
+.desktop-card[data-color=mint]{--paper:#e9f8f2;--paper-ink:#2e5146;--paper-muted:#739489;--paper-line:#cce5db;--accent:#347d67;--accent-soft:#d8eee4}
+.desktop-card[data-color=rose]{--paper:#fff0f4;--paper-ink:#684552;--paper-muted:#a5808e;--paper-line:#efd6df;--accent:#bd4668;--accent-soft:#f4dfe7}
+.desktop-card[data-color=sky]{--paper:#edf5ff;--paper-ink:#354f6a;--paper-muted:#7b93ac;--paper-line:#d0e2f5;--accent:#3e6fae;--accent-soft:#dfeafa}
+.desktop-card-handle{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3px 8px 3px 14px;-webkit-app-region:drag}
+.desktop-card-handle>span{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--paper-muted);letter-spacing:.3px}
+.desktop-card-actions{display:flex;align-items:center;gap:1px;-webkit-app-region:no-drag;opacity:.3;transition:opacity .15s}
+.desktop-card:hover .desktop-card-actions,.desktop-card:focus-within .desktop-card-actions{opacity:1}
+.desktop-card-actions button{min-height:24px;width:26px;padding:3px;color:var(--paper-muted)}
+.desktop-card-actions button:hover{color:var(--paper-ink);background:var(--accent-soft)}
+.desktop-card-paper{flex:1;min-height:0;display:flex;flex-direction:column;padding:5px 0 0;cursor:default}
+.desktop-card-paper>h1{font-size:19px;line-height:1.55;font-weight:650;letter-spacing:-.3px;margin:3px 20px 10px;overflow-wrap:anywhere;max-height:90px;overflow:auto;flex:none}
+.desktop-card-content{min-height:0;flex:1;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--paper-line) transparent}
+.desktop-card .markdown{font-size:14px;line-height:1.8;padding:2px 20px 18px;color:var(--paper-ink)}
+.desktop-card .markdown h1{font-size:21px}.desktop-card .markdown h2{font-size:18px}.desktop-card .markdown h3{font-size:15px}.desktop-card .markdown blockquote{border-left-width:2px;margin:14px 0;padding:1px 12px}.desktop-card .markdown p{margin:8px 0}.desktop-card .markdown li{margin:3px 0}.desktop-card .markdown pre{padding:10px}.desktop-card .markdown table{font-size:12px}
+.desktop-card-paper>footer{display:flex;align-items:center;justify-content:space-between;margin:0 15px;height:27px;flex:none;color:var(--paper-muted);font-size:10px;opacity:.45}
+.desktop-card-paper>footer button{font-size:10px;min-height:22px;padding:2px 4px;color:var(--paper-muted)}
+.desktop-card:hover .desktop-card-paper>footer,.desktop-card:focus-within .desktop-card-paper>footer{opacity:1}
+.desktop-card-edit{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:8px 16px 10px}
+.desktop-card-edit input{font-size:18px;font-weight:600;padding:4px 1px;background:transparent;border:0;border-bottom:1px solid var(--paper-line);border-radius:0;color:var(--paper-ink)}
+.desktop-card-edit textarea{flex:1;min-height:60px;resize:none;border:0;background:transparent;outline:0;padding:2px;line-height:1.8;color:var(--paper-ink);font-family:inherit;font-size:14px}
+.desktop-card-edit footer{display:flex;align-items:center;justify-content:flex-end;gap:8px;font-size:12px}
+.desktop-card-edit footer button{font-size:12px;min-height:28px}.desktop-card-edit .card-save{background:var(--accent);color:#fff}
+.desktop-card-message{font-size:12px;padding:8px 14px;color:var(--paper-ink);background:var(--accent-soft);line-height:1.7;flex:none}
+.desktop-card-message button{font-size:11px;color:var(--accent);padding:3px 5px;min-height:24px;text-decoration:underline}
+.desktop-card-loading{display:grid;place-items:center;flex:1;color:var(--paper-muted);font-size:13px}

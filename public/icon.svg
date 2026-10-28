@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <title>MOKI便签</title>
+  <desc>紫色圆角底上的折角便签，纸面绘有连贯圆润的手写小写字母 m。</desc>
+  <defs>
+    <linearGradient id="tile" x1="80" y1="32" x2="416" y2="496" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#877AEC"/>
+      <stop offset="1" stop-color="#5E54BE"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="168" y1="112" x2="340" y2="376" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F3F0FF"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="304" y1="300" x2="345" y2="342" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8CFFB"/>
+      <stop offset="1" stop-color="#B4A4ED"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="480" height="480" rx="116" fill="url(#tile)"/>
+  <rect x="17" y="17" width="478" height="478" rx="115" stroke="#FFFFFF" stroke-opacity=".13" stroke-width="2"/>
+  <rect x="111" y="103" width="258" height="264" rx="24" fill="#D7CAFF" fill-opacity=".45" transform="rotate(-9 240 235)"/>
+  <path d="M156 125H360C373.255 125 384 135.745 384 149V306L308 382H156C142.745 382 132 371.255 132 358V149C132 135.745 142.745 125 156 125Z" fill="#34296C" fill-opacity=".15"/>
+  <path d="M156 116H356C369.255 116 380 126.745 380 140V300L304 376H156C142.745 376 132 365.255 132 352V140C132 126.745 142.745 116 156 116Z" fill="url(#paper)"/>
+  <g stroke="#6B5DCA" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M177 274C180 251 184 222 188 201M181 250C191 218 204 197 220 201C240 206 232 245 228 270C238 237 253 200 272 203C292 206 281 243 286 261C290 276 304 271 316 259"/>
+  </g>
+  <path d="M304 376V322C304 309.85 313.85 300 326 300H380L304 376Z" fill="url(#fold)"/>
+  <path d="M304 376V322C304 309.85 313.85 300 326 300H380" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="2"/>
+</svg>
