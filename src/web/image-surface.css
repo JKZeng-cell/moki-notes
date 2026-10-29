@@ -7,4 +7,10 @@
 .image-viewer{position:fixed;inset:0;z-index:300;background:#10131bf2;color:#f3f5fa;display:flex;flex-direction:column;-webkit-app-region:no-drag}.image-viewer *{-webkit-app-region:no-drag;box-sizing:border-box}
 .image-viewer>header{height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 14px;background:#171c29;border-bottom:1px solid #ffffff24}.image-viewer>header>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;min-width:0}.image-viewer>header>div{display:flex;align-items:center;gap:3px;flex:none}.image-viewer button{color:#f3f5fa;background:transparent;min-width:32px;min-height:32px;padding:6px;font-size:12px}.image-viewer button:hover,.image-viewer button:focus-visible{background:#ffffff20}.image-viewer output{min-width:64px;text-align:center;font-size:11px}
 .image-viewer-stage{flex:1;min-height:0;overflow:auto;padding:20px}.image-viewer-stage.fit{display:flex;align-items:center;justify-content:center}.image-viewer-stage.fit img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}.image-viewer-stage.zoomed img{display:block;max-width:none;max-height:none;height:auto;margin:auto;flex:none}
+.image-viewer-content{display:flex;flex:1;min-height:0;min-width:0;line-height:1.5}
+.image-viewer .image-viewer-menu{z-index:1;line-height:1.5}
+.image-viewer .image-viewer-menu button{color:var(--text);font:inherit;font-size:12px;justify-content:flex-start;gap:9px;line-height:1.5}
+.image-viewer .image-viewer-menu button:hover,.image-viewer .image-viewer-menu button:focus-visible{background:var(--accent-soft);color:var(--accent)}
+.image-viewer-feedback{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);padding:9px 14px;border:1px solid #ffffff30;border-radius:9px;background:#202638;color:#f3f5fa;font-size:13px;line-height:1.5;overflow-wrap:anywhere;pointer-events:none}
+.image-viewer-feedback.error{color:#ffb8bc}
 @media(max-width:520px){.image-viewer>header>span{display:none}.image-viewer>header{justify-content:center;padding:8px}.image-viewer-stage{padding:12px}}

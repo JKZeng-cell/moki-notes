@@ -7,6 +7,7 @@ import { NotesStore } from '../src/server/store.js';
 import { Attachments } from '../src/server/attachments.js';
 import { exportTransfer, importTransfer, inspectTransfer } from '../src/server/transfer.js';
 import type { ListCommand } from '../src/shared/list-organization.js';
+import { createApp } from '../src/server/app.js';
 
 const dirs: string[] = [], stores: NotesStore[] = [];
 async function fixture() { const dir = await mkdtemp(join(tmpdir(), 'moki-transfer-test-')); dirs.push(dir); const store = new NotesStore(join(dir, 'notes.db')); stores.push(store); return { dir, store, assets: new Attachments(join(dir, 'assets')) }; }
@@ -73,7 +74,7 @@ it('rejects corrupt or changed packages before modifying the target', async () =
   await expect(importTransfer(b.store, b.assets, path, checked.fingerprint)).rejects.toThrow('校验失败'); expect(b.store.list({ status: 'all' }).total).toBe(0);
 });
 it('rejects invalid font preferences through the API', async () => {
-  const a = await fixture(); const { createApp } = await import('../src/server/app.js'); const app = await createApp(a.store);
+  const a = await fixture(); const app = await createApp(a.store);
   try { expect((await app.inject({ method: 'PUT', url: '/api/settings/appearance', payload: { fontSize: 99 } })).statusCode).toBe(400);
     expect((await app.inject({ method: 'PUT', url: '/api/settings/appearance', payload: { fontSize: 18 } })).json()).toEqual({ fontSize: 18 }); }
   finally { await app.close(); }

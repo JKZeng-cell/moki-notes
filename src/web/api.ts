@@ -29,6 +29,9 @@ declare global {
       importResources(video?: boolean): Promise<import('../shared/resources.js').AttachmentInfo[]>;
       openResource(resource: import('../shared/resources.js').ResourceData): Promise<void>;
       saveResource(resource: import('../shared/resources.js').ResourceData): Promise<boolean>;
+      copyResourceFile(resource: import('../shared/resources.js').ResourceData): Promise<void>;
+      copyResourceImage(data: Uint8Array): Promise<void>;
+      textClipboardAction(action: 'copy' | 'cut' | 'paste'): Promise<void>;
       pin(id: string, edit?: boolean): Promise<boolean>; unpin(id: string): Promise<boolean>;
       pins(): Promise<{ ids: string[]; top: boolean }>; top(value: boolean): Promise<void>;
       manager(id?: string): Promise<void>; onSelect(callback: (id: string) => void): () => void;

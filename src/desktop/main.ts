@@ -1,8 +1,9 @@
 import { app, BrowserWindow, ipcMain, dialog, shell, Menu, screen, session, clipboard } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { writeFile } from 'node:fs/promises';
-import { randomUUID } from 'node:crypto';
+import { appendFile, writeFile } from 'node:fs/promises';
+import { createHash, randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 import { createApp } from '../server/app.js';
 import { NotesStore } from '../server/store.js';
@@ -13,22 +14,35 @@ import { CHECK_UNSAVED, SAVE_FOR_INSTALL, QuitCoordinator } from './quit.js';
 import { Attachments } from '../server/attachments.js';
 import { importResources, openResource, saveResource } from './resources.js';
 import { CacheSettings } from './cache-settings.js';
+import { prepareBuildCache } from './cache-build.js';
 import { registerDataSettings } from './data-settings.js';
 import { APP_DEVELOPER_EMAIL, DEVELOPER_CONTACT_URL } from '../shared/app-metadata.js';
 import { copyDeveloperEmail } from './copy-developer-email.js';
-import { INSTALL_EXIT_ARG, isInstallExitRequest, installRequestId, reportInstallResult, waitInstallResult } from './install-exit.js';
+import { copyResourceFile, copyResourceImage } from './resource-clipboard.js';
+import { INSTALL_EXIT_ARG, INSTALL_CONFIRMED_ARG, isInstallExitRequest, isConfirmedInstallExitRequest, installRequestId, reportInstallResult, waitInstallResult } from './install-exit.js';
 
 if (process.env.MOKI_NOTES_PROFILE) app.setPath('userData', process.env.MOKI_NOTES_PROFILE);
 else app.setPath('userData', join(app.getPath('appData'), 'moki-notes'));
 app.setAppUserModelId('com.moki.notes');
 const installExit = process.argv.includes(INSTALL_EXIT_ARG);
 const requestId = installExit ? randomUUID() : undefined;
-const ownsLock = app.requestSingleInstanceLock({ quitForInstall: installExit, executable: process.execPath, installRequestId: requestId });
+const ownsLock = app.requestSingleInstanceLock({ quitForInstall: installExit, executable: process.execPath, installRequestId: requestId,
+  installSaveConfirmed: installExit && process.argv.includes(INSTALL_CONFIRMED_ARG) });
 // A quit-only helper must never initialize a database, tray or window.
 if (installExit && !ownsLock) void waitInstallResult(requestId!).then(code => app.exit(code));
 else if (!ownsLock || installExit) app.exit(0);
 const cacheSettings = ownsLock && !installExit ? new CacheSettings(app.getPath('userData')) : undefined;
+let cachePreparationError: unknown;
+if (cacheSettings) {
+  try {
+    const revision = createHash('sha256').update(readFileSync(fileURLToPath(import.meta.url)))
+      .update(readFileSync(fileURLToPath(new URL('../web/index.html', import.meta.url)))).digest('hex');
+    prepareBuildCache(cacheSettings.activePath, revision);
+  } catch (error) { cachePreparationError = error; }
+}
 let activeInstallRequest: string | undefined;
+const logInstall = (phase: string, detail = '') => appendFile(join(app.getPath('userData'), 'install-exit.log'),
+  `${new Date().toISOString()} ${phase} ${detail.slice(0, 1500)}\n`, 'utf8').catch(() => {});
 let manager: BrowserWindow | undefined, origin = '', quitting = false;
 const pins = new Map<string, BrowserWindow>();
 type PinState = { id: string; bounds: Electron.Rectangle; top: boolean };
@@ -66,6 +80,7 @@ const quit = new QuitCoordinator<BrowserWindow>({
     return result.response === 1;
   },
   lock: async (windows, locked) => {
+    await logInstall(locked ? 'lock-editors' : 'unlock-editors', `windows=${windows.length}`);
     await Promise.all(windows.filter(w => !w.isDestroyed() && !w.webContents.isDestroyed()).map(w => withTimeout(w.webContents.executeJavaScript(`(() => {
       if (${locked}) {
         if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -78,13 +93,14 @@ const quit = new QuitCoordinator<BrowserWindow>({
     })()`))));
   },
   save: async w => {
+    await logInstall('save-window', `window=${w.id} loading=${w.webContents.isLoading()} crashed=${w.webContents.isCrashed()}`);
     if (w.isDestroyed() || w.webContents.isDestroyed() || w.webContents.isCrashed()) throw Error('有便签窗口暂不可用，已保留程序，请检查后重试');
     if (new URL(w.webContents.getURL()).origin !== origin) throw Error('便签窗口尚未就绪，请稍后重试');
     const ok = await withTimeout(w.webContents.executeJavaScript(SAVE_FOR_INSTALL));
     if (ok !== true) { w.show(); w.focus(); }
     return ok === true;
   },
-  installResult: result => reportInstallResult(activeInstallRequest, result),
+  installResult: async (result, detail) => { await logInstall(result, detail); await reportInstallResult(activeInstallRequest, result); },
   commit: () => { savePins(); quitting = true; app.quit(); },
   error: error => { dialog.showErrorBox('暂时无法退出 MOKI便签', `请保存当前内容后重试。\n${String(error)}`); },
 });
@@ -140,8 +156,9 @@ function pin(id: string, state?: PinState, edit = false) {
 app.on('second-instance', (_event, _argv, _cwd, data) => {
   if (isInstallExitRequest(data, process.execPath)) {
     const id = installRequestId(data);
-    if (quit.pending || quit.approved) { void reportInstallResult(id, quit.approved ? 'saved' : 'failed'); return; }
-    activeInstallRequest = id; void quit.request('install'); return;
+    void logInstall('request', `pending=${quit.pending} approved=${quit.approved} windows=${BrowserWindow.getAllWindows().length}`);
+    if (quit.pending || quit.approved) { void reportInstallResult(id, quit.approved ? 'saved' : 'busy'); return; }
+    activeInstallRequest = id; void quit.request('install', isConfirmedInstallExitRequest(data, process.execPath)); return;
   }
   if (origin) showManager();
 });
@@ -160,6 +177,7 @@ app.on('will-quit', event => {
 });
 
 if (ownsLock && !installExit) void app.whenReady().then(async () => {
+  if (cachePreparationError) throw Error(`更新页面缓存失败，旧缓存已保留。请检查缓存目录权限后重试。${String(cachePreparationError)}`);
   session.defaultSession.setCodeCachePath(join(cacheSettings!.activePath, 'Code Cache'));
   // Embedded pages do not inherit device, notification or clipboard access.
   const allowPermission = (permission: string, requestingUrl: string) => {
@@ -196,6 +214,9 @@ if (ownsLock && !installExit) void app.whenReady().then(async () => {
   ipcMain.handle('notes:resource-import', (e, video) => importResources(trusted(e), attachments, z.boolean().parse(video)));
   ipcMain.handle('notes:resource-open', (e, resource) => { trusted(e); return openResource(attachments, resource); });
   ipcMain.handle('notes:resource-save', (e, resource) => saveResource(trusted(e), attachments, resource));
+  ipcMain.handle('notes:resource-copy-file', (e, resource) => { trusted(e); return copyResourceFile(attachments, resource); });
+  ipcMain.handle('notes:resource-copy-image', (e, data) => { trusted(e); return copyResourceImage(data); });
+  ipcMain.handle('notes:text-clipboard', (e, value) => { trusted(e); const action = z.enum(['copy', 'cut', 'paste']).parse(value); e.sender[action](); });
   ipcMain.handle('notes:pin', (e, id, edit) => { trusted(e); pin(z.string().uuid().parse(id), undefined, z.boolean().optional().parse(edit)); return true; });
   ipcMain.handle('notes:unpin', (e, id) => { trusted(e); pins.get(z.string().uuid().parse(id))?.close(); return true; });
   ipcMain.handle('notes:pins', e => { const w = trusted(e); return { ids: [...pins.keys()], top: w.isAlwaysOnTop() }; });

@@ -29,3 +29,9 @@
 .desktop-card-message{font-size:12px;padding:8px 14px;color:var(--paper-ink);background:var(--accent-soft);line-height:1.7;flex:none}
 .desktop-card-message button{font-size:11px;color:var(--accent);padding:3px 5px;min-height:24px;text-decoration:underline}
 .desktop-card-loading{display:grid;place-items:center;flex:1;color:var(--paper-muted);font-size:13px}
+
+.card-main .card-title{padding-right:56px}
+.card-favorite{position:absolute;right:39px;top:11px;width:27px;min-height:27px;padding:5px;color:var(--muted);opacity:0;border-radius:6px}
+.note-card:hover .card-favorite,.note-card:focus-within .card-favorite,.card-favorite.starred{opacity:1}
+.card-favorite.starred{color:var(--accent)}.card-favorite:hover,.card-favorite:focus-visible{color:var(--accent);background:var(--accent-soft)}
+@media(hover:none){.card-favorite{opacity:1}}

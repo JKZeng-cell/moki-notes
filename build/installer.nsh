@@ -40,10 +40,17 @@
       SetErrorLevel 2
       Quit
       StrCpy $R7 10
+      StrCpy $R6 ""
+    ${ElseIf} $R7 == 10
+      MessageBox MB_OKCANCEL|MB_ICONQUESTION "MOKI便签正在运行。点击确定，将自动保存主窗口和桌面便签的编辑内容，关闭便签及其 MCP 后台，然后继续安装。保存失败时会保留窗口，不会强制关闭。$\r$\n$\r$\n旧版本还会在便签窗口中显示“保存并关闭”，请一并确认。是否继续？" /SD IDCANCEL IDOK +3
+      SetErrorLevel 2
+      Quit
+      StrCpy $R6 "-SaveConfirmed"
     ${EndIf}
     ${If} $R7 == 10
-      DetailPrint "请在 MOKI便签中确认保存并关闭，安装将在退出后继续。"
-      nsExec::ExecToStack /TIMEOUT=400000 '"$PowerShellPath" -NoLogo -NoProfile -NonInteractive -File "$PLUGINSDIR\moki-installer-process.ps1" -InstallDirectory "$INSTDIR" -Mode quit'
+      DetailPrint "正在保存并关闭 MOKI便签。旧版本若出现“保存并关闭”窗口，请确认后继续。"
+      !insertmacro MokiInstallLog "Save and close confirmed; requesting graceful exit."
+      nsExec::ExecToStack /TIMEOUT=400000 '"$PowerShellPath" -NoLogo -NoProfile -NonInteractive -File "$PLUGINSDIR\moki-installer-process.ps1" -InstallDirectory "$INSTDIR" -Mode quit $R6'
       Pop $R7
       Pop $R8
       DetailPrint "$R8"
@@ -63,7 +70,10 @@
       Quit
     ${EndIf}
     ${If} $R7 != 0
-      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "MOKI便签尚未完成保存并关闭。请处理空标题、版本冲突或保存错误后重试。旧版本请先手动保存，再从托盘退出。$\r$\n$\r$\n目标：$INSTDIR\${APP_EXECUTABLE_FILENAME}$\r$\n$R8" /SD IDCANCEL IDRETRY +3
+      ${If} $R7 == 40
+        StrCpy $R8 "程序未响应或上一次退出仍未完成，不能确认自动保存成功。请返回便签检查窗口；不要反复点击重试。未确认保存成功前，安装器不会强制结束编辑进程。$\r$\n$\r$\n$R8"
+      ${EndIf}
+      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "MOKI便签尚未退出，安装文件仍被占用。$\r$\n$\r$\n请先检查便签窗口：若有“保存并关闭”提示，请确认；若提示保存错误或版本冲突，请处理后重试。若下方显示 MCP 正忙或重新连接，请在 Agent 中暂停便签连接后重试。旧版本也可保存后从托盘退出。$\r$\n$\r$\n目标：$INSTDIR\${APP_EXECUTABLE_FILENAME}$\r$\n$R8" /SD IDCANCEL IDRETRY +3
       SetErrorLevel 2
       Quit
       nsExec::ExecToStack /TIMEOUT=15000 '"$PowerShellPath" -NoLogo -NoProfile -NonInteractive -File "$PLUGINSDIR\moki-installer-process.ps1" -InstallDirectory "$INSTDIR" -Mode check'

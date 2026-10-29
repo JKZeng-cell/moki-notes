@@ -30,7 +30,9 @@ Screenshots show the real Windows app with its editable built-in guide. The incl
 
 ## Download and install (Windows x64)
 
-**[Download MOKI Notes 0.1.0 installer](https://github.com/JKZeng-cell/moki-notes/releases/download/v0.1.0/MOKI-Notes-Setup-0.1.0-x64.exe)** · [All releases and checksums](https://github.com/JKZeng-cell/moki-notes/releases/latest)
+Version 0.1.1 adds context actions in enlarged image previews, image/file clipboard copying, minute-level edit times, and Windows update fixes. [Release notes](docs/releases/0.1.1.md).
+
+**[Download MOKI Notes 0.1.1 installer](https://github.com/JKZeng-cell/moki-notes/releases/download/v0.1.1/MOKI-Notes-Setup-0.1.1-x64.exe)** · [All releases and checksums](https://github.com/JKZeng-cell/moki-notes/releases/latest)
 
 Download the `.exe`, run the setup wizard, choose an install location, and launch the app. The installer includes the application runtime and Feishu/Lark CLI; regular installation does not require Node.js or npm. Feishu sync still requires your own authorization and configuration in the app.
 

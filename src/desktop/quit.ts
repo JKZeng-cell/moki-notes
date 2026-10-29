@@ -26,11 +26,11 @@ export class QuitCoordinator<T> {
     confirmInstall?(windows: T[]): Promise<boolean>;
     save?(window: T): Promise<boolean>;
     lock?(windows: T[], locked: boolean): Promise<void>;
-    installResult?(result: 'saved' | 'cancelled' | 'failed'): Promise<void>;
+    installResult?(result: 'saved' | 'cancelled' | 'failed', detail?: string): Promise<void>;
     commit(): void;
     error(reason: unknown): void;
   }) {}
-  async request(reason: 'quit' | 'install' = 'quit') {
+  async request(reason: 'quit' | 'install' = 'quit', installConfirmed = false) {
     if (this.pending || this.approved) return;
     this.pending = true;
     let locked: T[] = [];
@@ -38,7 +38,7 @@ export class QuitCoordinator<T> {
       const windows = this.handlers.windows();
       if (reason === 'install') {
         if (!this.handlers.confirmInstall || !this.handlers.save || !this.handlers.lock) throw Error('当前版本尚不支持安装前保存，请手动保存后退出');
-        if (!(await this.handlers.confirmInstall(windows))) { await this.handlers.installResult?.('cancelled'); return; }
+        if (!installConfirmed && !(await this.handlers.confirmInstall(windows))) { await this.handlers.installResult?.('cancelled'); return; }
         locked = windows;
         await this.handlers.lock(windows, true);
         // Sequential saves keep two dirty editors for the same note from
@@ -57,7 +57,7 @@ export class QuitCoordinator<T> {
       this.handlers.commit();
     } catch (error) {
       this.approved = false;
-      if (reason === 'install') { try { await this.handlers.installResult?.('failed'); } catch { /* Keep the application open even if the helper disappeared. */ } }
+      if (reason === 'install') { try { await this.handlers.installResult?.('failed', String(error)); } catch { /* Keep the application open even if the helper disappeared. */ } }
       this.handlers.error(error);
     }
     finally {

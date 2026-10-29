@@ -20,6 +20,28 @@ function Test-MokiMcpProcess {
     try { return [string]::Equals([IO.Path]::GetFullPath($match.Groups['exe'].Value),$target,[StringComparison]::OrdinalIgnoreCase) -and [string]::Equals([IO.Path]::GetFullPath($match.Groups['entry'].Value),$entry,[StringComparison]::OrdinalIgnoreCase) } catch { return $false }
 }
 
+function Test-MokiInstallHelper {
+    param([string]$Executable, [object]$Process)
+    if (-not $Process.ExecutablePath -or -not $Process.CommandLine) { return $false }
+    $target = [IO.Path]::GetFullPath($Executable)
+    if (-not [string]::Equals([IO.Path]::GetFullPath($Process.ExecutablePath),$target,[StringComparison]::OrdinalIgnoreCase)) { return $false }
+    $match = [regex]::Match($Process.CommandLine,'^\s*(?:"(?<exe>[^"]+)"|(?<exe>[^"\s]+))\s+--quit-for-install(?:\s+--install-save-confirmed)?\s*$')
+    if (-not $match.Success) { return $false }
+    try { return [string]::Equals([IO.Path]::GetFullPath($match.Groups['exe'].Value),$target,[StringComparison]::OrdinalIgnoreCase) } catch { return $false }
+}
+function Select-MokiDesktopProcess {
+    param([string]$Executable, [object[]]$Processes)
+    $entries = @(Select-MokiInstallProcess -Executable $Executable -Processes $Processes)
+    $helpers = @($entries | Where-Object { Test-MokiInstallHelper -Executable $Executable -Process $_ })
+    foreach ($entry in $entries) {
+        if (Test-MokiMcpProcess -Executable $Executable -Process $entry) { continue }
+        if (Test-MokiInstallHelper -Executable $Executable -Process $entry) { continue }
+        # Only Electron children of a verified, still-live quit-only helper.
+        $owner = @($helpers | Where-Object { $_.ProcessId -eq $entry.ParentProcessId -and $_.CreationDate -le $entry.CreationDate })
+        if ($owner.Count -and $entry.CommandLine -match '\s--type=(gpu-process|utility)(\s|$)') { continue }
+        $entry
+    }
+}
 function Request-MokiMcpShutdown {
     param([string]$Executable, [int]$ProcessId)
     $pipe = New-Object IO.Pipes.NamedPipeClientStream('.',"moki-notes-mcp-install-$ProcessId",[IO.Pipes.PipeDirection]::InOut,[IO.Pipes.PipeOptions]::Asynchronous)
@@ -37,4 +59,4 @@ function Request-MokiMcpShutdown {
         } finally { $writer.Dispose(); $reader.Dispose() }
     } finally { $pipe.Dispose() }
 }
-Export-ModuleMember -Function Select-MokiInstallProcess,Test-MokiMcpProcess,Request-MokiMcpShutdown
+Export-ModuleMember -Function Select-MokiInstallProcess,Test-MokiMcpProcess,Request-MokiMcpShutdown,Test-MokiInstallHelper,Select-MokiDesktopProcess

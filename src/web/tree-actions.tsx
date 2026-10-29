@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowUpRight, CornerDownRight, FilePlus2, FolderInput, Link2, Pencil, Plus, Trash2, X } from 'lucide-react';
+import { ArrowUpRight, CornerDownRight, FilePlus2, FolderInput, Link2, Pencil, Plus, Star, Trash2, X } from 'lucide-react';
 import type { Note, NoteSummary } from '../shared/model.js';
 import type { TreeMoveInput } from '../shared/tree.js';
 import type { DragNote } from './tree-drag.js';
 import { api } from './api.js';
 import { NoteSelect } from './note-select.js';
 
-type ListMenu = { onGroup(): void; onPurge(): void };
+type ListMenu = { onGroup(): void; onPurge(): void; onFavorite(): void };
 type Dialog = { kind: 'create' | 'rename' | 'move' | 'add' | 'trash'; note?: NoteSummary; parentId?: string | null };
 export function useTreeActions({ nodes, onOpen, onChanged, onSelected, onError }: { nodes: NoteSummary[]; onOpen(id: string): void; onChanged(): void; onSelected(id: string): void; onError(message: string): void }) {
   const [menu, setMenu] = useState<{ note: NoteSummary; x: number; y: number; list?: ListMenu } | null>(null), [dialog, setDialog] = useState<Dialog | null>(null);
@@ -84,6 +84,7 @@ export function useTreeActions({ nodes, onOpen, onChanged, onSelected, onError }
       if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) { e.preventDefault(); const buttons = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('button')], index = buttons.indexOf(document.activeElement as HTMLButtonElement); buttons[e.key === 'Home' ? 0 : e.key === 'End' ? buttons.length - 1 : (index + (e.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length]?.focus(); }
     }}><div className="tree-context-title">{menu.note.title}</div>
       <button role="menuitem" onClick={() => { onOpen(menu.note.id); setMenu(null); }}><ArrowUpRight size={15} />打开便签</button>
+      {menu.list && <button role="menuitem" onClick={() => { menu.list!.onFavorite(); setMenu(null); }}><Star size={15} fill={menu.note.starred ? 'currentColor' : 'none'} />{menu.note.starred ? '取消收藏' : '收藏便签'}</button>}
       <button role="menuitem" onClick={() => open({ kind: 'create', parentId: menu.note.id })}><Plus size={15} />新建下级节点</button>
       <button role="menuitem" onClick={() => open({ kind: 'create', parentId: menu.note.parentId })}><FilePlus2 size={15} />新建同级节点</button>
       <button role="menuitem" onClick={() => open({ kind: 'add', note: menu.note })}><Link2 size={15} />添加已有便签</button><hr />

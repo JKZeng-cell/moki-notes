@@ -1,5 +1,7 @@
 # MOKI便签 · MOKI Notes
 
+0.1.1 更新：放大图片预览右键操作、图片/文件剪贴板复制、最近编辑时间显示时分，以及 Windows 更新退出修复。[更新说明](docs/releases/0.1.1.md)。
+
 简体中文 · [English](README.md)
 
 **随手记下灵感，钉到桌面，再把零散想法连成知识。**
@@ -30,7 +32,7 @@ MOKI便签是一款本地 Markdown 便签应用，支持桌面卡片、知识关
 
 ## 下载安装（Windows x64）
 
-**[下载 MOKI便签 0.1.0 安装包](https://github.com/JKZeng-cell/moki-notes/releases/download/v0.1.0/MOKI-Notes-Setup-0.1.0-x64.exe)** · [所有发布与校验文件](https://github.com/JKZeng-cell/moki-notes/releases/latest)
+**[下载 MOKI便签 0.1.1 安装包](https://github.com/JKZeng-cell/moki-notes/releases/download/v0.1.1/MOKI-Notes-Setup-0.1.1-x64.exe)** · [所有发布与校验文件](https://github.com/JKZeng-cell/moki-notes/releases/latest)
 
 下载 `.exe`，运行安装向导，选择安装目录后即可启动。安装包包含应用运行环境和飞书 CLI，普通安装使用不需要另装 Node.js 或 npm。飞书同步仍需在应用内完成自己的授权与配置。
 

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { isInstallExitRequest, installRequestId, reportInstallResult, waitInstallResult } from '../src/desktop/install-exit.js';
+import { isInstallExitRequest, isConfirmedInstallExitRequest, installRequestId, reportInstallResult, waitInstallResult } from '../src/desktop/install-exit.js';
 import { randomUUID } from 'node:crypto';
 
 it('only accepts a quit handshake from the same executable', () => {
@@ -9,11 +9,20 @@ it('only accepts a quit handshake from the same executable', () => {
     { quitForInstall: true, executable: 'D:/Program Files/MOKI-Notes-other/MOKI-Notes.exe' },
     { quitForInstall: true, executable: 1 }]) expect(isInstallExitRequest(data, exe)).toBe(false);
 });
+it('only transfers explicit installer consent for a valid same-executable request', () => {
+  const exe = 'D:/MOKI-Notes/MOKI-Notes.exe';
+  const request = { quitForInstall: true, executable: exe, installRequestId: randomUUID(), installSaveConfirmed: true };
+  expect(isConfirmedInstallExitRequest(request, exe)).toBe(true);
+  for (const patch of [{ installSaveConfirmed: false }, { installSaveConfirmed: 'true' }, { installRequestId: undefined },
+    { quitForInstall: false }, { executable: 'D:/Other/MOKI-Notes.exe' }]) {
+    expect(isConfirmedInstallExitRequest({ ...request, ...patch }, exe)).toBe(false);
+  }
+});
 it('reports cancellation and save failure to the installer helper without arbitrary file paths', async () => {
-  for (const [status,code] of [['saved',0],['cancelled',2],['failed',3]] as const) {
+  for (const [status,code] of [['saved',0],['cancelled',2],['failed',3],['busy',5]] as const) {
     const id=randomUUID();await reportInstallResult(id,status); expect(await waitInstallResult(id,500)).toBe(code);
   }
   expect(installRequestId({installRequestId:'../../anything'})).toBeUndefined();
   await expect(reportInstallResult('../../anything','saved')).rejects.toThrow('无效');
-  expect(await waitInstallResult(randomUUID(),1)).toBe(3);
+  expect(await waitInstallResult(randomUUID(),1)).toBe(4);
 });

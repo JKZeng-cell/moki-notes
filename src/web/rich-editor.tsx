@@ -12,6 +12,7 @@ import './block-layout.css';
 import { ResourceInsert, uploadResourceFiles } from './resource-insert.js';
 import type { ResourceKind } from '../shared/resources.js';
 import { EditorTools } from './editor-tools.js';
+import { TextContextMenu } from './text-context-menu.js';
 import { richExtensions } from './rich-extensions.js';
 
 type Command = { name: string; hint: string; keys: string; icon: LucideIcon; run(editor: Editor): void };
@@ -43,6 +44,7 @@ export function RichEditor({ value, onChange, noteId, compact = false, disabled 
   const resourceLock = useRef(false);
   const insertForm = useRef<(type: 'link' | 'image') => void>(() => {});
   const [popup, setPopup] = useState<Popup | null>(null), [item, setItem] = useState(0), [, repaint] = useState(0);
+  const [textContextOpen, setTextContextOpen] = useState(false);
   const [form, setForm] = useState<{ type: 'link' | 'image' | 'math'; from: number; to: number; text: string; pos?: number } | null>(null), [url, setUrl] = useState(''), [formError, setFormError] = useState('');
   const close = () => { popRef.current = null; setPopup(null); };
   const readOnly = useRef(disabled); readOnly.current = disabled;
@@ -174,10 +176,11 @@ export function RichEditor({ value, onChange, noteId, compact = false, disabled 
     </div>}
     {resourceBusy && <div className="resource-feedback" role="status">正在导入附件…</div>}{resourceError && <div className="resource-error" role="alert">{resourceError}</div>}
     <div className="rich-scroll"><EditorContent editor={editor} /></div>
+    <TextContextMenu editor={editor} disabled={disabled} onOpenChange={setTextContextOpen} onLink={() => openForm('link')} />
     <BlockControls editor={editor} disabled={disabled || !!form || !!resourceForm || !!popup} />
     <TableEdgeControls editor={editor} disabled={disabled || !!form || !!resourceForm || popup?.kind === 'slash'} />
     <TableStyleControls editor={editor} disabled={disabled || !!form || !!resourceForm || !!popup} />
-    {popup && !form && !resourceForm && !disabled && createPortal(<div ref={popupElement} data-moki-tools="" className={`editor-popup ${popup.kind === 'slash' ? 'slash-menu' : 'selection-tools'}`} style={{ left: popup.x, top: popup.y }} role={popup.kind === 'slash' ? 'listbox' : 'toolbar'} aria-label={popup.kind === 'slash' ? '插入格式' : '选中文字格式'} onMouseDown={e => e.preventDefault()} onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); dismissed.current = editor.state.selection.from; editor.commands.focus(); close(); } }}>
+    {popup && !textContextOpen && !form && !resourceForm && !disabled && createPortal(<div ref={popupElement} data-moki-tools="" className={`editor-popup ${popup.kind === 'slash' ? 'slash-menu' : 'selection-tools'}`} style={{ left: popup.x, top: popup.y }} role={popup.kind === 'slash' ? 'listbox' : 'toolbar'} aria-label={popup.kind === 'slash' ? '插入格式' : '选中文字格式'} onMouseDown={e => e.preventDefault()} onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); dismissed.current = editor.state.selection.from; editor.commands.focus(); close(); } }}>
       {popup.kind === 'selection' ? formats : <><div className="slash-caption">插入内容 <span>↑ ↓ 选择 · Enter 插入</span></div>{choices(popup.query).map((c, i) => <button key={c.name} role="option" aria-selected={item === i} onMouseEnter={() => { itemRef.current = i; setItem(i); }} onClick={() => run(editor, c, popup)}><span className="slash-icon" aria-hidden="true"><c.icon size={17} strokeWidth={1.75} /></span><span className="slash-copy"><strong>{c.name}</strong><small>{c.hint}</small></span></button>)}{!choices(popup.query).length && <p>没有匹配的格式</p>}</>}
     </div>, document.body)}
     {resourceForm && <ResourceInsert initialKind={resourceForm.kind} excludeNoteId={noteId} onClose={() => { setResourceForm(null); editor.commands.focus(); }} onInsert={(resources) => {

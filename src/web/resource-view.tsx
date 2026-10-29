@@ -1,3 +1,4 @@
+import { noteEditTime } from './note-time.js';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ExternalLink, MoreHorizontal, Download, Copy, Trash2, LoaderCircle } from 'lucide-react';
@@ -5,31 +6,13 @@ import { assetIdFromSource, noteIdFromSource, remotePreview, videoEmbedSource, v
 import { api } from './api.js';
 import { ResourceFileIcon } from './resource-file-icon.js';
 import { ImageSurface } from './image-surface.js';
+import { openEmbeddedResource, saveEmbeddedResource } from './resource-actions.js';
+export { openEmbeddedResource } from './resource-actions.js';
+import { copyEmbeddedImage } from './resource-clipboard.js';
 import type { Note } from '../shared/model.js';
-import { NoteAttachmentExcerpt, openNoteAttachment, referencedNote } from './note-attachment.js';
+import { NoteAttachmentExcerpt } from './note-attachment.js';
 
 function sizeLabel(size: number) { return size >= 1024 ** 2 ? `${(size / 1024 ** 2).toFixed(1)} MB` : `${Math.max(1, Math.round(size / 1024))} KB`; }
-export async function openEmbeddedResource(resource: ResourceData) {
-  if (resource.kind === 'note') return openNoteAttachment(resource);
-  if (window.mokiDesktop) return window.mokiDesktop.openResource(resource);
-  const link = document.createElement('a'); link.href = resource.src; link.target = '_blank'; link.rel = 'noopener noreferrer';
-  if (assetIdFromSource(resource.src)) { link.href += '?download=1'; link.download = resource.title; }
-  link.click();
-}
-async function saveEmbeddedResource(resource: ResourceData) {
-  if (resource.kind === 'note') {
-    const note = await referencedNote(resource);
-    if (window.mokiDesktop) return window.mokiDesktop.export(note.id, 'md');
-    const link = document.createElement('a'); link.href = `/api/notes/${note.id}/export/md`; link.download = `${note.title}.md`; link.click(); return true;
-  }
-  if (window.mokiDesktop) return window.mokiDesktop.saveResource(resource);
-  const link = document.createElement('a'), local = assetIdFromSource(resource.src);
-  if (!local && (resource.kind === 'web' || videoEmbedSource(resource.src))) {
-    const url = URL.createObjectURL(new Blob([`[InternetShortcut]\r\nURL=${resource.src}\r\n`], { type: 'application/octet-stream' }));
-    link.href = url; link.download = `${resource.title}.url`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
-  } else { link.href = resource.src + (local ? '?download=1' : ''); link.download = resource.title; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.click(); }
-  return true;
-}
 
 export function ResourceView({ resource, onChange, onRemove, imageOnly = false, imageWidth, onImageResize }: { resource: ResourceData; onChange?(next: ResourceData): void | Promise<void>; onRemove?(): void | Promise<void>; imageOnly?: boolean; imageWidth?: number | null; onImageResize?(width: number | null): void }) {
   const [mode, setMode] = useState(resource.view), [info, setInfo] = useState<AttachmentInfo | null>(null);
@@ -88,7 +71,7 @@ export function ResourceView({ resource, onChange, onRemove, imageOnly = false, 
   }
   const changeMode = (view: ResourceViewMode) => action(async () => { await onChange?.({ ...resource, title: linkedNote?.title ?? resource.title, view }); setMode(view); });
   const canPreview = !missing && (preview !== 'none' || !!id && !info);
-  const source = noteId ? linkedNote ? `${linkedNote.archived ? '已归档便签' : '便签'} · ${new Date(linkedNote.updatedAt).toLocaleDateString('zh-CN')}更新` : '便签引用' : info ? `${info.name} · ${sizeLabel(info.size)}` : id ? '本地附件' : imageOnly ? '图片' : new URL(resource.src).hostname;
+  const source = noteId ? linkedNote ? `${linkedNote.archived ? '已归档便签' : '便签'} · ${noteEditTime(linkedNote.updatedAt, true)}更新` : '便签引用' : info ? `${info.name} · ${sizeLabel(info.size)}` : id ? '本地附件' : imageOnly ? '图片' : new URL(resource.src).hostname;
   const title = linkedNote?.title ?? resource.title, openLabel = noteId ? '打开便签' : '使用默认应用打开';
   const open = () => void action(() => openEmbeddedResource(resource));
   const copy = () => action(() => navigator.clipboard.writeText(new URL(resource.src, location.origin).href), '链接已复制');
@@ -114,6 +97,8 @@ export function ResourceView({ resource, onChange, onRemove, imageOnly = false, 
       if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) { e.preventDefault(); const list = [...(menuRef.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? [])], current = list.indexOf(document.activeElement as HTMLButtonElement); list[e.key === 'Home' ? 0 : e.key === 'End' ? list.length - 1 : (current + (e.key === 'ArrowDown' ? 1 : -1) + list.length) % list.length]?.focus(); }
     }}>
       <button role="menuitem" disabled={missing || info?.canOpen === false} onClick={open}><ExternalLink size={14} />{openLabel}</button>
+      {(imageOnly || preview === 'image') && <button role="menuitem" disabled={missing || pending} onClick={() => void action(() => copyEmbeddedImage(resource), '图片已复制，可直接粘贴')}><Copy size={14} />复制图片</button>}
+      {!!id && !!window.mokiDesktop && <button role="menuitem" disabled={missing || pending} onClick={() => void action(() => window.mokiDesktop!.copyResourceFile(resource), '文件已复制，可直接粘贴')}><Copy size={14} />{imageOnly || preview === 'image' ? '复制原文件' : '复制文件'}</button>}
       <button role="menuitem" disabled={missing} onClick={() => void action(() => saveEmbeddedResource(resource), '已另存为')}><Download size={14} />{noteId ? '导出便签为 Markdown…' : '另存为…'}</button>
       <button role="menuitem" onClick={() => void copy()}><Copy size={14} />复制链接</button>
       {!displayImage && <><div className="resource-menu-caption">显示方式</div><div className="resource-view-options" role="group" aria-label="显示方式">{Object.entries(viewLabels).map(([view, label]) => <button role="menuitemradio" aria-checked={mode === view} key={view} disabled={view === 'preview' && !canPreview} onClick={() => void changeMode(view as ResourceViewMode)}>{label}</button>)}</div></>}

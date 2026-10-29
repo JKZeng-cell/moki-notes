@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ZoomIn, ZoomOut, Scan, RotateCcw } from 'lucide-react';
 import { imageWidth } from '../shared/image-size.js';
+import { ImageViewerActions } from './image-viewer-actions.js';
 import './image-surface.css';
 
 function ImageViewer({ src, title, onClose }: { src: string; title: string; onClose(): void }) {
@@ -11,6 +12,7 @@ function ImageViewer({ src, title, onClose }: { src: string; title: string; onCl
     const previous = document.activeElement as HTMLElement | null;
     root.current?.querySelector<HTMLButtonElement>('button')?.focus();
     const key = (e: KeyboardEvent) => {
+      if (e.target instanceof Element && e.target.closest('.image-viewer-menu')) return;
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); onClose(); }
       if (e.key === 'Tab') {
         const buttons = [...(root.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? [])];
@@ -22,9 +24,9 @@ function ImageViewer({ src, title, onClose }: { src: string; title: string; onCl
     return () => { window.removeEventListener('keydown', key, true); if (previous?.isConnected) previous.focus({ preventScroll: true }); };
   }, [onClose]);
   const adjust = (delta: number) => setZoom(current => Math.max(.25, Math.min(4, (current ?? Math.min(1, (innerWidth - 40) / (natural.width || innerWidth), (innerHeight - 96) / (natural.height || innerHeight))) + delta)));
-  return createPortal(<div ref={root} className="image-viewer" role="dialog" aria-modal="true" aria-label="图片预览" onPointerDown={e => e.stopPropagation()} onDoubleClick={e => e.stopPropagation()}>
+  return createPortal(<div ref={root} className="image-viewer" role="dialog" aria-modal="true" aria-label="图片预览" onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }} onPointerDown={e => e.stopPropagation()} onDoubleClick={e => e.stopPropagation()}>
     <header><span title={title}>{title}</span><div><button aria-label="缩小图片预览" title="缩小" onClick={() => adjust(-.25)} disabled={zoom === .25}><ZoomOut size={18} /></button><output>{zoom === null ? '适应窗口' : `${Math.round(zoom * 100)}%`}</output><button aria-label="放大图片预览" title="放大" onClick={() => adjust(.25)} disabled={zoom === 4}><ZoomIn size={18} /></button><button aria-label="原始尺寸" title="原始尺寸" onClick={() => setZoom(1)}>1:1</button><button aria-label="适应窗口" title="适应窗口" onClick={() => setZoom(null)}><Scan size={18} /></button><button aria-label="关闭图片预览" title="关闭 Esc" onClick={onClose}><X size={20} /></button></div></header>
-    <div className={`image-viewer-stage ${zoom === null ? 'fit' : 'zoomed'}`} onClick={e => { if (e.target === e.currentTarget && e.detail === 1) onClose(); }}><img src={src} alt={title} draggable={false} onLoad={e => setNatural({ width: e.currentTarget.naturalWidth, height: e.currentTarget.naturalHeight })} style={zoom !== null && natural.width ? { width: natural.width * zoom } : undefined} /></div>
+    <ImageViewerActions src={src} title={title}><div className={`image-viewer-stage ${zoom === null ? 'fit' : 'zoomed'}`} onClick={e => { if (e.target === e.currentTarget && e.detail === 1) onClose(); }}><img src={src} alt={title} tabIndex={0} draggable={false} onLoad={e => setNatural({ width: e.currentTarget.naturalWidth, height: e.currentTarget.naturalHeight })} style={zoom !== null && natural.width ? { width: natural.width * zoom } : undefined} /></div></ImageViewerActions>
   </div>, document.body);
 }
 export function ImageSurface({ src, title, width, onResize, onError, inline = false }: { src: string; title: string; width?: number | null; onResize?(width: number | null): void; onError?(): void; inline?: boolean }) {

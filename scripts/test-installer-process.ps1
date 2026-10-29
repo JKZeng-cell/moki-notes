@@ -29,3 +29,16 @@ $mcp.ExecutablePath=$simple; $mcp.CommandLine='"D:\MOKI-Notes\MOKI-Notes.exe" D:
 if(-not(Test-MokiMcpProcess -Executable $simple -Process $mcp)){throw 'Actual Codex command not recognized'}
 if(Test-MokiMcpProcess -Executable $target -Process $mcp){throw 'Sibling MCP must not match'}
 Write-Output 'PASS: MCP exact entry, quoted and unquoted paths, desktop/renderer/extra-args/sibling rejection'
+$helper = [pscustomobject]@{Name='MOKI-Notes.exe';ExecutablePath=$target;ProcessId=101;ParentProcessId=1;CreationDate=[datetime]'2026-10-29';CommandLine=('"{0}" --quit-for-install --install-save-confirmed' -f $target)}
+if (-not (Test-MokiInstallHelper -Executable $target -Process $helper)) { throw 'Quit-only helper not recognized' }
+foreach ($cmd in @(('"{0}"' -f $target),('"{0}" --quit-for-install --unexpected' -f $target),('"{0}" --type=renderer --quit-for-install' -f $target),('"D:\Other\MOKI-Notes.exe" --quit-for-install'))) {
+    $fake = $helper.PSObject.Copy(); $fake.CommandLine = $cmd
+    if (Test-MokiInstallHelper -Executable $target -Process $fake) { throw 'Ordinary application must not be treated as helper' }
+}
+$gpu = [pscustomobject]@{Name='MOKI-Notes.exe';ExecutablePath=$target;ProcessId=102;ParentProcessId=101;CreationDate=[datetime]'2026-10-29T00:00:01';CommandLine=('"{0}" --type=gpu-process' -f $target)}
+$desktop = $gpu.PSObject.Copy(); $desktop.ProcessId=103; $desktop.ParentProcessId=1; $desktop.CommandLine=('"{0}"' -f $target)
+$actual = @(Select-MokiDesktopProcess -Executable $target -Processes @($helper,$gpu,$desktop))
+if (($actual.ProcessId -join ',') -ne '103') { throw 'Only helper and its actual child should be excluded' }
+$gpu.CreationDate=[datetime]'2026-10-28'
+if (@(Select-MokiDesktopProcess -Executable $target -Processes @($helper,$gpu)).Count -ne 1) { throw 'Reused parent PID must not exclude a desktop process' }
+Write-Output 'PASS: quit-only helper recognition, real desktop preservation, helper children and reused PID isolation'

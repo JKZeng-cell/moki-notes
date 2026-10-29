@@ -1,6 +1,6 @@
 {
   "name": "moki-notes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "MOKI便签 · 本地 Markdown 便签与 Agent 记忆树",
   "author": "MOKI",

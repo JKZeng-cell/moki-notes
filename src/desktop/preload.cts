@@ -31,5 +31,8 @@ contextBridge.exposeInMainWorld('mokiDesktop', {
   importResources: (video = false) => ipcRenderer.invoke('notes:resource-import', video),
   openResource: (resource: unknown) => ipcRenderer.invoke('notes:resource-open', resource),
   saveResource: (resource: unknown) => ipcRenderer.invoke('notes:resource-save', resource),
+  copyResourceFile: (resource: unknown) => ipcRenderer.invoke('notes:resource-copy-file', resource),
+  copyResourceImage: (data: Uint8Array) => ipcRenderer.invoke('notes:resource-copy-image', data),
+  textClipboardAction: (action: 'copy' | 'cut' | 'paste') => ipcRenderer.invoke('notes:text-clipboard', action),
   export: (id: string, format: string) => ipcRenderer.invoke('notes:export', id, format),
 });

@@ -29,6 +29,19 @@ describe('background application exit', () => {
 });
 
 describe('save and close for installation', () => {
+  it('uses installer consent once but still saves every window and aborts on failure', async () => {
+    for (const success of [true, false]) {
+      const confirmInstall = vi.fn(), commit = vi.fn(), result = vi.fn(), lock = vi.fn(async () => {});
+      const saved: number[] = [];
+      const q = new QuitCoordinator({ windows: () => [1, 2], isDirty: async () => !success, confirm: vi.fn(), confirmInstall,
+        lock, save: async w => { saved.push(w); return w === 1 || success; }, installResult: result, commit, error: vi.fn() });
+      await q.request('install', true);
+      expect(confirmInstall).not.toHaveBeenCalled(); expect(saved).toEqual([1, 2]);
+      expect(result.mock.calls[0][0]).toBe(success ? 'saved' : 'failed');
+      expect(commit).toHaveBeenCalledTimes(success ? 1 : 0);
+      if (!success) expect(lock).toHaveBeenLastCalledWith([1, 2], false);
+    }
+  });
   it('confirms even a clean app, saves every window sequentially and rechecks before closing', async () => {
     const events: string[] = [], dirty = new Set(['main', 'card']);
     const q = new QuitCoordinator({ windows: () => ['main','card'], isDirty: async w => dirty.has(w), confirm: vi.fn(),
@@ -48,7 +61,7 @@ describe('save and close for installation', () => {
     const q=new QuitCoordinator({windows:()=>[1,2],isDirty:async()=>true,confirm:vi.fn(),confirmInstall:async()=>true,lock,
       save:async w=>w===1,installResult:result,commit,error});
     await q.request('install'); expect(commit).not.toHaveBeenCalled(); expect(q.approved).toBe(false);
-    expect(result).toHaveBeenCalledWith('failed'); expect(lock).toHaveBeenLastCalledWith([1,2],false); expect(error).toHaveBeenCalledOnce();
+    expect(result.mock.calls[0][0]).toBe('failed'); expect(result.mock.calls[0][1]).toContain('便签尚未成功保存'); expect(lock).toHaveBeenLastCalledWith([1,2],false); expect(error).toHaveBeenCalledOnce();
   });
   it('refuses to close if edits remain or a new window opened while saving', async () => {
     for(const extra of [false,true]) {
