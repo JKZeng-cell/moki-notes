@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { Check, Clock3, LoaderCircle, FolderOpen, HardDrive, Settings2, Trash2, Type, X } from 'lucide-react';
+import { Check, Clock3, LoaderCircle, FolderOpen, HardDrive, Power, Settings2, Trash2, Type, X } from 'lucide-react';
 import { announceAppearance } from './appearance.js';
 import { TransferSettings } from './data-settings.js';
 import { FeishuSettings } from './feishu-settings.js';
@@ -10,25 +10,34 @@ const settingTabs = [['general', '偏好设置'], ['data', '数据与存储'], [
 import { api } from './api.js';
 import { announcePurged, draftAssets, purgeMessage } from './trash-data.js';
 import { announceAutoSave } from './use-autosave.js';
-import type { Appearance, AutoSave, CacheInfo, TrashPreview, PurgeResult } from '../shared/settings.js';
+import type { Appearance, AutoSave, CacheInfo, TrashPreview, PurgeResult, StartupSettings } from '../shared/settings.js';
 
 export function Settings({ onClose, onClean, feishu, initialTab = 'general' }: { onClose(): void; onClean(ids: string[]): void; feishu: FeishuSession; initialTab?: 'general' | 'feishu' }) {
   const [auto, setAuto] = useState<AutoSave | null>(null), [cache, setCache] = useState<CacheInfo | null>(null), [trash, setTrash] = useState<TrashPreview | null>(null);
   const [busy, setBusy] = useState(false), [message, setMessage] = useState(''), [error, setError] = useState(''), [confirming, setConfirming] = useState(false);
   const [tab, setTab] = useState<(typeof settingTabs)[number][0]>(initialTab);
   const [appearance, setAppearance] = useState<Appearance | null>(null);
+  const [startup, setStartupState] = useState<StartupSettings | null>(null);
   const close = useRef<HTMLButtonElement>(null);
   async function load() {
     setError('');
-    const results = await Promise.allSettled([api<AutoSave>('/settings/autosave'), api<TrashPreview>('/trash/preview'), window.mokiDesktop?.cacheInfo(), api<Appearance>('/settings/appearance')]);
+    const results = await Promise.allSettled([api<AutoSave>('/settings/autosave'), api<TrashPreview>('/trash/preview'), window.mokiDesktop?.cacheInfo(), api<Appearance>('/settings/appearance'), window.mokiDesktop?.getStartup()]);
     if (results[0].status === 'fulfilled') setAuto(results[0].value);
     if (results[1].status === 'fulfilled') setTrash(results[1].value);
     if (results[2].status === 'fulfilled') setCache(results[2].value ?? null);
     if (results[3].status === 'fulfilled') setAppearance(results[3].value);
+    if (results[4].status === 'fulfilled') setStartupState(results[4].value ?? { supported: false, enabled: false, reason: '请在桌面应用中设置' });
     const failed = results.find(r => r.status === 'rejected');
     if (failed?.status === 'rejected') setError(`读取设置失败：${String(failed.reason)}`);
   }
   useEffect(() => { const previous = document.activeElement as HTMLElement; close.current?.focus(); void load(); return () => previous?.focus(); }, []);
+  useEffect(() => {
+    if (busy || tab !== 'general' || !window.mokiDesktop) return;
+    let active = true;
+    const refresh = () => { void window.mokiDesktop!.getStartup().then(value => { if (active) setStartupState(value); }).catch(() => { if (active) setError('读取设置失败：无法读取系统启动项'); }); };
+    window.addEventListener('focus', refresh);
+    return () => { active = false; window.removeEventListener('focus', refresh); };
+  }, [busy, tab]);
   async function run(action: () => Promise<void>) {
     if (busy) return; setBusy(true); setMessage(''); setError('');
     try { await action(); } catch (e) { setError((e as Error).message.replace(/^Error invoking remote method ['"][^'"]+['"]: (?:Error: )?/, '')); } finally { setBusy(false); }
@@ -46,6 +55,7 @@ export function Settings({ onClose, onClean, feishu, initialTab = 'general' }: {
         <div className="settings-row"><div className="settings-row-copy"><label htmlFor="autosave-delay">等待时间</label></div><select id="autosave-delay" value={auto?.delayMs ?? 750} disabled={!auto?.enabled || busy} onChange={e => auto && void update({ ...auto, delayMs: Number(e.target.value) as AutoSave['delayMs'] })}><option value={750}>0.75 秒</option><option value={1500}>1.5 秒</option><option value={3000}>3 秒</option><option value={5000}>5 秒</option></select></div>
         <small className="settings-help">{auto?.enabled ? '无需手动保存，修改后自动生效。' : '已关闭，请使用 Ctrl / ⌘ + S 保存；未保存内容保留为草稿。'}</small>
       </section>
+      <section className="settings-section"><div className="settings-section-heading"><span className="settings-section-icon"><Power size={18} /></span><div className="settings-section-copy"><h3><label htmlFor="startup-enabled">开机自启动</label></h3><p>{startup?.supported ? '登录系统后自动启动 MOKI便签' : startup?.reason ?? '正在读取系统设置…'}</p></div><input id="startup-enabled" aria-label="开机自启动" type="checkbox" role="switch" checked={startup?.enabled ?? false} disabled={!startup?.supported || busy} onChange={e => { const enabled = e.target.checked; void run(async () => { const saved = await window.mokiDesktop!.setStartup(enabled); setStartupState(saved); setMessage(saved.enabled ? '已开启开机自启动' : '已关闭开机自启动'); }); }} /></div></section>
       </>}
       {tab === 'data' && <><TransferSettings busy={busy} run={run} message={setMessage} changed={() => { void load(); onClean([]); }} />
       <section className="settings-section"><div className="settings-section-heading"><span className="settings-section-icon"><HardDrive size={18} /></span><div className="settings-section-copy"><h3>应用缓存</h3><p>清理临时文件，不影响便签和附件</p></div></div>

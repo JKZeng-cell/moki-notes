@@ -15,6 +15,7 @@ import { Attachments } from '../server/attachments.js';
 import { importResources, openResource, saveResource } from './resources.js';
 import { CacheSettings } from './cache-settings.js';
 import { prepareBuildCache } from './cache-build.js';
+import { startupSettings, setStartup } from './startup.js';
 import { registerDataSettings } from './data-settings.js';
 import { APP_DEVELOPER_EMAIL, DEVELOPER_CONTACT_URL } from '../shared/app-metadata.js';
 import { copyDeveloperEmail } from './copy-developer-email.js';
@@ -189,7 +190,7 @@ if (ownsLock && !installExit) void app.whenReady().then(async () => {
   store = new NotesStore(dataPath());
   store.ensureDemo();
   const attachments = new Attachments(`${store.path}.attachments`);
-  server = await createApp(store, { attachments, webRoot: fileURLToPath(new URL('../web', import.meta.url)), mcpCommand: process.execPath, mcpEnv: { ELECTRON_RUN_AS_NODE: '1' }, onPurged: ids => {
+  server = await createApp(store, { attachments, desktopWebAssets: true, webRoot: fileURLToPath(new URL('../web', import.meta.url)), mcpCommand: process.execPath, mcpEnv: { ELECTRON_RUN_AS_NODE: '1' }, onPurged: ids => {
     for (const id of ids) pins.get(id)?.destroy();
   } });
   // A stable origin retains renderer drafts and theme across application restarts.
@@ -205,6 +206,8 @@ if (ownsLock && !installExit) void app.whenReady().then(async () => {
     for (const state of store.preference<PinState[]>('desktopPins', [])) { try { if (!pins.has(state.id)) pin(state.id, state); } catch { /* Deleted or invalid pin is not opened. */ } }
   });
   ipcMain.handle('notes:app-version', e => { trusted(e); return app.getVersion(); });
+  ipcMain.handle('notes:startup-get', e => { trusted(e); return startupSettings(app, process.platform, process.execPath); });
+  ipcMain.handle('notes:startup-set', (e, value) => { trusted(e); return setStartup(app, process.platform, process.execPath, z.boolean().parse(value)); });
   ipcMain.handle('notes:copy-developer-email', async e => { trusted(e); await copyDeveloperEmail(clipboard); });
   ipcMain.handle('notes:contact-developer', async e => {
     trusted(e);

@@ -10,10 +10,11 @@ import { Attachments } from './attachments.js';
 import { attachmentRoutes } from './attachment-routes.js';
 import { GraphPosition } from '../shared/graph-position.js';
 import { AppearanceSettings, defaultAppearance } from '../shared/settings.js';
+import { registerDesktopWebAssets } from './web-assets.js';
 
 const Id = z.string().uuid();
 const versionBody = z.object({ expectedVersion: z.number().int().positive() }).strict();
-export async function createApp(store: NotesStore, options: { webRoot?: string; mcpCommand?: string; mcpEnv?: Record<string, string>; attachments?: Attachments; onPurged?(ids: string[]): void } = {}) {
+export async function createApp(store: NotesStore, options: { webRoot?: string; desktopWebAssets?: boolean; mcpCommand?: string; mcpEnv?: Record<string, string>; attachments?: Attachments; onPurged?(ids: string[]): void } = {}) {
   const app = Fastify({ logger: false, bodyLimit: 5 * 1024 * 1024 });
   app.addHook('onRequest', async (req, reply) => {
     // Loopback binding alone is insufficient: reject DNS rebinding and cross-site requests.
@@ -24,6 +25,10 @@ export async function createApp(store: NotesStore, options: { webRoot?: string; 
     reply.header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; media-src 'self' https: http:; font-src 'self' data:; connect-src 'self'; frame-src 'self' https: http:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
   });
   app.setErrorHandler((error, _req, reply) => {
+    // A failed HTML/image stream can leave its MIME type and length behind.
+    // Reset them before sending JSON so the original error is not masked.
+    for (const name of ['content-length', 'content-encoding', 'content-range', 'content-disposition', 'etag', 'last-modified']) reply.removeHeader(name);
+    reply.type('application/json; charset=utf-8').header('Cache-Control', 'no-store');
     if (error instanceof ZodError) return reply.code(400).send({ error: 'VALIDATION', message: error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join('; ') });
     if (error instanceof AppError) return reply.code(error.status).send({ error: error.code, message: error.message });
     const e = error as Error & { statusCode?: number };
@@ -97,6 +102,9 @@ export async function createApp(store: NotesStore, options: { webRoot?: string; 
     const result = await exportNote(store.get(id(req)), f);
     return reply.type(result.mime).header('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(result.name)}`).send(result.bytes);
   });
-  if (options.webRoot) await app.register(fastifyStatic, { root: options.webRoot });
+  if (options.webRoot) {
+    if (options.desktopWebAssets) await registerDesktopWebAssets(app, options.webRoot);
+    else await app.register(fastifyStatic, { root: options.webRoot });
+  }
   return app;
 }

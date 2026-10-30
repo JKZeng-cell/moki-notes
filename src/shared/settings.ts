@@ -9,3 +9,4 @@ export const defaultAppearance: Appearance = { fontSize: 14 };
 export type TrashPreview = { total: number; protected: number; candidates: Array<{ id: string; version: number }>; revisions: number; affected: number; pendingAssets: number };
 export type PurgeResult = { ids: string[]; count: number; attachments?: { removed: number; retained: number; failed: string[]; pending: number } };
 export type CacheInfo = { path: string; activePath: string; defaultPath: string; restartRequired: boolean; error: string; bytes: number };
+export type StartupSettings = { supported: boolean; enabled: boolean; reason?: string };

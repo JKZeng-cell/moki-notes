@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 contextBridge.exposeInMainWorld('mokiDesktop', {
   appVersion: () => ipcRenderer.invoke('notes:app-version'),
+  getStartup: () => ipcRenderer.invoke('notes:startup-get'),
+  setStartup: (enabled: boolean) => ipcRenderer.invoke('notes:startup-set', enabled),
   contactDeveloper: () => ipcRenderer.invoke('notes:contact-developer'),
   copyDeveloperEmail: () => ipcRenderer.invoke('notes:copy-developer-email'),
   transferExport: () => ipcRenderer.invoke('notes:transfer-export'),

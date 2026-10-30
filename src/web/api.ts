@@ -10,6 +10,8 @@ declare global {
   interface Window {
     mokiDesktop?: {
       appVersion(): Promise<string>;
+      getStartup(): Promise<import('../shared/settings.js').StartupSettings>;
+      setStartup(enabled: boolean): Promise<import('../shared/settings.js').StartupSettings>;
       contactDeveloper(): Promise<void>;
       copyDeveloperEmail(): Promise<void>;
       transferExport(): Promise<{ notes: number; revisions: number; attachments: number; bytes: number; path: string } | null>;

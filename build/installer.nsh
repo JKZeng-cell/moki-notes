@@ -1,6 +1,18 @@
 !include "LogicLib.nsh"
 !include "FileFunc.nsh"
 
+!macro customUnInstall
+  ; Remove only this installation's login entry; keep other installs untouched.
+  ${IfNot} ${isUpdated}
+  ReadRegStr $R0 HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MOKI Notes"
+  ${If} $R0 == '"$INSTDIR\${APP_EXECUTABLE_FILENAME}"'
+  ${OrIf} $R0 == '$INSTDIR\${APP_EXECUTABLE_FILENAME}'
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MOKI Notes"
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" "MOKI Notes"
+  ${EndIf}
+  ${EndIf}
+!macroend
+
 !macro MokiInstallLog TEXT
   Push $R9
   FileOpen $R9 "$TEMP\MOKI-Notes-installer.log" a
