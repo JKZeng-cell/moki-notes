@@ -6,7 +6,7 @@
 
 MOKI Notes is a local Markdown notes app with desktop sticky cards, an explicit knowledge graph, attachments, Feishu/Lark sync, and a local MCP server for your Agent. It runs independently of MOKI Workbench and MOKI Whiteboard.
 
-The current source is **0.1.3**: optional Windows launch at login and a fix for desktop sticky cards failing to load. See [source changes and validation](docs/releases/0.1.3.md). The published installer below remains 0.1.1 until a new binary release is published.
+The current source is **0.1.4**: knowledge graph nodes show full note titles at 150% zoom and above, with wrapping for long titles and intact emoji. See [source changes and validation](docs/releases/0.1.4.md). The published installer below remains 0.1.1 until a new binary release is published.
 
 ![MOKI Notes — the editable built-in guide](docs/screenshots/overview.png)
 
